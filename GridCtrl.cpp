@@ -1596,6 +1596,8 @@ void CGridCtrl::OnVScroll(UINT nSBCode, UINT /*nPos*/, CScrollBar* /*pScrollBar*
     default: 
         break;
     }
+	SendMessageToParent(0, 0, WM_VSCROLL);
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
