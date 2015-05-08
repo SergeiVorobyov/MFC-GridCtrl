@@ -503,10 +503,12 @@ BOOL CGridCellBase::GetTextRect( LPRECT pRect)  // i/o:  i=dims of cell rect; o=
 }
 
 // By default this uses the selected font (which is a bigger font)
-CSize CGridCellBase::GetTextExtent(LPCTSTR szText, CDC* pDC /*= NULL*/)
+CSize CGridCellBase::GetTextExtent(LPCTSTR szText, CDC* pDC /*= NULL*/,int ColWidth)
 {
     CGridCtrl* pGrid = GetGrid();
     ASSERT(pGrid);
+
+	int cellwidth = ColWidth;
 
     BOOL bReleaseDC = FALSE;
     if (pDC == NULL || szText == NULL)
@@ -543,6 +545,8 @@ CSize CGridCellBase::GetTextExtent(LPCTSTR szText, CDC* pDC /*= NULL*/)
             int nTempWidth = pDC->GetTextExtent(TempStr).cx;
             if (nTempWidth > nMaxWidth)
                 nMaxWidth = nTempWidth;
+			if (nTempWidth > cellwidth)
+				nMaxWidth = cellwidth;
 
             if (nPos < 0)
                 break;
@@ -584,9 +588,9 @@ CSize CGridCellBase::GetTextExtent(LPCTSTR szText, CDC* pDC /*= NULL*/)
 }
 
 
-CSize CGridCellBase::GetCellExtent(CDC* pDC)
+CSize CGridCellBase::GetCellExtent(CDC* pDC,int ColWidth)
 {    
-    CSize size = GetTextExtent(GetText(), pDC);    
+    CSize size = GetTextExtent(GetText(), pDC,ColWidth);    
     CSize ImageSize(0,0);    
     
     int nImage = GetImage();    

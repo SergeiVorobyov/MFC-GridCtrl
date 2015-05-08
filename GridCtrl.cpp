@@ -5129,7 +5129,7 @@ void CGridCtrl::AutoSize(UINT nAutoSizeStyle /*=GVS_DEFAULT*/)
                 {
                     CGridCellBase* pCell = GetCell(nRow, nCol);
                     if (pCell)
-                        size = pCell->GetCellExtent(pDC);
+                        size = pCell->GetCellExtent(pDC,GetColumnWidth(nCol));
                     if (size.cx >(int) m_arColWidths[nCol])
                         m_arColWidths[nCol] = size.cx;
                     if (size.cy >(int) m_arRowHeights[nRow])
@@ -7504,7 +7504,7 @@ CSize CGridCtrl::GetTextExtent(int nRow, int nCol, LPCTSTR str)
     if (!pCell)
         return CSize(0, 0);
     else
-        return pCell->GetTextExtent(str);
+		return pCell->GetTextExtent(str,NULL,m_arColWidths[m_arColOrder[nCol]]);
 }
 
 // virtual
