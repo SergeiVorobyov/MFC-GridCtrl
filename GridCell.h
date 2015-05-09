@@ -51,6 +51,7 @@ public:
     void operator=(const CGridCell& cell);
 
     virtual void  SetText(LPCTSTR szText)        { m_strText = szText;  }                       
+	virtual void  SetTextTip(LPCTSTR szText)        { m_strTextTip = szText;  }           //sery            
     virtual void  SetImage(int nImage)           { m_nImage = nImage;   }                        
     virtual void  SetData(LPARAM lParam)         { m_lParam = lParam;   }      
     virtual void  SetGrid(CGridCtrl* pGrid)      { m_pGrid = pGrid;     }                          
@@ -66,6 +67,8 @@ public:
                                                             // column for base implementation
 
     virtual LPCTSTR     GetText() const             { return (m_strText.IsEmpty())? _T("") : LPCTSTR(m_strText); }
+	//sery
+	virtual LPCTSTR     GetTipText() const             { return (m_strTextTip.IsEmpty())? GetText() : LPCTSTR(m_strTextTip); }
     virtual int         GetImage() const            { return m_nImage;  }
     virtual LPARAM      GetData() const             { return m_lParam;  }
     virtual CGridCtrl*  GetGrid() const             { return m_pGrid;   }
@@ -91,6 +94,7 @@ protected:
 
 protected:
     CString    m_strText;      // Cell text (or binary data if you wish...)
+	CString    m_strTextTip;      // Cell text (or binary data if you wish...)  //sery
     LPARAM     m_lParam;       // 32-bit value to associate with item
     int        m_nImage;       // Index of the list view item�s icon
     DWORD      m_nFormat;

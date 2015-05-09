@@ -87,6 +87,8 @@ public:
 // Attributes
 public:
     virtual void SetText(LPCTSTR /* szText */)              = 0 ;
+	virtual void SetTextTip(LPCTSTR szText)					= 0 ;      //sery                
+
     virtual void SetImage(int /* nImage */)                 = 0 ;
     virtual void SetData(LPARAM /* lParam */)               = 0 ;
     virtual void SetState(DWORD nState)                     { m_nState = nState; }

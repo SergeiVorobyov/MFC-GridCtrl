@@ -5813,6 +5813,10 @@ void CGridCtrl::OnMouseMove(UINT /*nFlags*/, CPoint point)
                 if (pCell)
                 {
                     LPCTSTR szTipText = pCell->GetTipText();
+					if(pCell->GetTipText() != pCell->GetText())
+					{
+						int jj=0;
+					}
                     if (!m_bRMouseButtonDown
 						&& szTipText && szTipText[0]
                         && !pCell->IsEditing()
