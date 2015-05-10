@@ -57,7 +57,6 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 // CInPlaceEdit
-
 CInPlaceEdit::CInPlaceEdit(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
                            int nRow, int nColumn, CString sInitText, 
                            UINT nFirstChar)
