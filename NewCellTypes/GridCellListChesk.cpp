@@ -5,6 +5,9 @@
 #include "GridCellListChesk.h"
 
 
+/////////////////////////////////////////////////////////////////////////////
+
+
 CInPlaceListCheck::CInPlaceListCheck(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
                            int nRow, int nColumn, 
                            COLORREF crFore, COLORREF crBack,
@@ -14,7 +17,7 @@ CInPlaceListCheck::CInPlaceListCheck(CWnd* pParent, CRect& rect, DWORD dwStyle, 
     m_crForeClr = crFore;
     m_crBackClr = crBack;
 
-	m_nNumLines = 4;
+	m_nNumLines = Items.GetSize();;//4;
 	m_sInitText = sInitText;
  	m_nRow		= nRow;
  	m_nCol      = nColumn;
@@ -25,59 +28,42 @@ CInPlaceListCheck::CInPlaceListCheck(CWnd* pParent, CRect& rect, DWORD dwStyle, 
  	DWORD dwComboStyle = WS_BORDER|WS_CHILD|WS_VISIBLE|WS_VSCROLL|
  					     CBS_AUTOHSCROLL | dwStyle;
 	dwComboStyle = WS_CHILD | LBS_OWNERDRAWFIXED | LBS_HASSTRINGS | WS_BORDER | WS_VSCROLL |WS_VISIBLE;
+
 	int nHeight = rect.Height();
+	CFont *pFnt = pParent->GetFont();
+	LOGFONT hLg;
+	pFnt->GetLogFont(&hLg);
+	nHeight = 	abs(hLg.lfHeight);
+
+
 	rect.bottom = rect.bottom + m_nNumLines*nHeight + ::GetSystemMetrics(SM_CYHSCROLL);
 	if (!Create(dwComboStyle, rect, pParent, nID)) return;
 
 	// Add the strings
 	for (int i = 0; i < Items.GetSize(); i++) 
-		AddString(Items[i]);
+	{
+		int iItem = AddString(Items[i]);
+		if(sInitText.Find(Items[i]) != -1)
+		{
+			SetCheck(i,1);
+		}
+	}
 
 	SetFont(pParent->GetFont());
 	SetItemHeight(-1, nHeight);
 
     int nMaxLength = GetCorrectDropWidth();
-    /*
+    
     if (nMaxLength > rect.Width())
 	    rect.right = rect.left + nMaxLength;
 	// Resize the edit window and the drop down window
 	MoveWindow(rect);
-    */
+    
 
-//	SetDroppedWidth(nMaxLength);
 
 	SetHorizontalExtent(0); // no horz scrolling
 
-	// Set the initial text to m_sInitText
-    if (::IsWindow(m_hWnd) && SelectString(-1, m_sInitText) == CB_ERR) 
-		SetWindowText(m_sInitText);		// No text selected, so restore what was there before
-
-//    ShowDropDown();
-
-    // Subclass the combobox edit control if style includes CBS_DROPDOWN
-/*    if ((dwStyle & CBS_DROPDOWNLIST) != CBS_DROPDOWNLIST)
-    {
-        m_edit.SubclassDlgItem(IDC_COMBOEDIT, this);
- 	    SetFocus();
-        switch (nFirstChar)
-        {
-            case VK_LBUTTON: 
-            case VK_RETURN:   m_edit.SetSel((int)_tcslen(m_sInitText), -1); return;
-            case VK_BACK:     m_edit.SetSel((int)_tcslen(m_sInitText), -1); break;
-            case VK_DOWN: 
-            case VK_UP:   
-            case VK_RIGHT:
-            case VK_LEFT:  
-            case VK_NEXT:  
-            case VK_PRIOR: 
-            case VK_HOME:  
-            case VK_END:      m_edit.SetSel(0,-1); return;
-            default:          m_edit.SetSel(0,-1);
-        }
-        SendMessage(WM_CHAR, nFirstChar);
-    }
-    else*/
- 	    SetFocus();
+ 	SetFocus();
 }
 
 CInPlaceListCheck::~CInPlaceListCheck()
@@ -86,8 +72,17 @@ CInPlaceListCheck::~CInPlaceListCheck()
 void CInPlaceListCheck::EndEdit()
 {
 	CString str;
-	if (::IsWindow(m_hWnd))
-		GetWindowText(str);
+	str="";
+	CString s;
+	for(int i=0; i < GetCount();i++)
+	{
+		if(GetCheck(i))
+		{
+			GetText(i,s);
+			str+=s;
+			str+="\r\n";
+		}
+	}
 
 	// Send Notification to parent
 	GV_DISPINFO dispinfo;
@@ -113,7 +108,7 @@ void CInPlaceListCheck::EndEdit()
 
 int CInPlaceListCheck::GetCorrectDropWidth()
 {
-	const int nMaxWidth = 200;  // don't let the box be bigger than this
+	const int nMaxWidth = 300;  // don't let the box be bigger than this
 
 	// Reset the dropped width
 	int nNumEntries = GetCount();
@@ -156,7 +151,7 @@ void CInPlaceListCheck::OnKillFocus(CWnd* pNewWnd)
 		return;
 
 	// Only end editing on change of focus if we're using the CBS_DROPDOWNLIST style
-	if ((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST)
+//	if ((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST)
 		EndEdit();
 }
 void CInPlaceListCheck::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
@@ -238,8 +233,6 @@ BOOL CGridCellListChesk::Edit(int nRow, int nCol, CRect rect, CPoint /* point */
 }
 CWnd* CGridCellListChesk::GetEditWnd() const
 {
-//	if (m_pEditWnd && (m_pEditWnd->GetStyle() & CBS_DROPDOWNLIST) != CBS_DROPDOWNLIST )
-//		return &(((CInPlaceListCheck*)m_pEditWnd)->m_edit);
 
 	return NULL;
 }
@@ -253,8 +246,8 @@ CSize CGridCellListChesk::GetCellExtent(CDC* pDC)
 }
 void CGridCellListChesk::EndEdit()
 {
-//	if (m_pEditWnd)
-//		((CInPlaceListCheck*)m_pEditWnd)->EndEdit();
+	if (m_pEditWnd)
+		((CInPlaceListCheck*)m_pEditWnd)->EndEdit();
 }
 BOOL CGridCellListChesk::Draw(CDC* pDC, int nRow, int nCol, CRect rect,  BOOL bEraseBkgnd /*=TRUE*/)
 {

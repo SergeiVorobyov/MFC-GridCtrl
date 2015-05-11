@@ -31,7 +31,41 @@ protected:
 	DWORD        m_dwStyle;
 };
 
-//sery
+
+#define IDC_LISTEDIT 1002
+
+/*class CCellListCheskoEdit : public CEdit
+{
+	// Construction
+public:
+	CCellListCheskoEdit();
+
+	// Attributes
+public:
+
+	// Operations
+public:
+
+	// Overrides
+	// ClassWizard generated virtual function overrides
+	//{{AFX_VIRTUAL(CCellListCheskoEdit)
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	//}}AFX_VIRTUAL
+
+	// Implementation
+public:
+	virtual ~CCellListCheskoEdit();
+
+	// Generated message map functions
+protected:
+	//{{AFX_MSG(CCellListCheskoEdit)
+	afx_msg void OnKillFocus(CWnd* pNewWnd);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
+	//}}AFX_MSG
+
+	DECLARE_MESSAGE_MAP()
+};*/
 class CInPlaceListCheck : public CCheckListBox 
 {
 //	friend class CInPlaceList;
@@ -50,7 +84,7 @@ public:
 
 	// Attributes
 public:
-//	CComboEdit m_edit;  // subclassed edit control
+//	CCellListCheskoEdit m_edit;  // subclassed edit control
 
 	// Operations
 public:

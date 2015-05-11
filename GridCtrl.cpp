@@ -7617,6 +7617,9 @@ void CGridCtrl::ResetVirtualOrder()
 
 void CGridCtrl::Reorder(int From, int To)
 {
+	//sery
+	if(From == To)
+		return;
 		// Set line From just after Line To
 	ASSERT(From>= GetFixedRowCount() && To>=GetFixedRowCount()-1 && From<m_nRows && To<m_nRows);
 	int Value = m_arRowOrder[From];
