@@ -152,6 +152,7 @@ protected:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnDropdown();
+	void OnSelchange();
 	afx_msg UINT OnGetDlgCode();
 	afx_msg HBRUSH CtlColor(CDC* pDC, UINT nCtlColor);
 	//}}AFX_MSG

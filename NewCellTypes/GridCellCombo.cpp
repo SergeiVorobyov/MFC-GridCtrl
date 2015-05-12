@@ -309,10 +309,26 @@ BEGIN_MESSAGE_MAP(CInPlaceList, CComboBox)
 	ON_CONTROL_REFLECT(CBN_DROPDOWN, OnDropdown)
 	ON_WM_GETDLGCODE()
 	ON_WM_CTLCOLOR_REFLECT()
+	ON_CONTROL_REFLECT(CBN_SELCHANGE, OnSelchange)
 	//}}AFX_MSG_MAP
 	//ON_CONTROL_REFLECT(CBN_SELENDOK, OnSelendOK)
 END_MESSAGE_MAP()
 
+void CInPlaceList::OnSelchange()
+{
+	// TODO: Add your control notification handler code here
+	int iIndex = GetCurSel(); 
+	if( iIndex != CB_ERR) 
+	{ 
+		CString strLbText; 
+		GetLBText( iIndex, strLbText); 
+
+		if (!((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST)) 
+			m_edit.SetWindowText( strLbText); 
+	} 
+
+	GetParent()->SetFocus(); 	
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CInPlaceList message handlers
