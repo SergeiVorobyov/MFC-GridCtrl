@@ -5813,10 +5813,14 @@ void CGridCtrl::OnMouseMove(UINT /*nFlags*/, CPoint point)
                 if (pCell)
                 {
                     LPCTSTR szTipText = pCell->GetTipText();
-					if(pCell->GetTipText() != pCell->GetText())
+/*					if(pCell->GetTipText() != pCell->GetText())
 					{
-						int jj=0;
+						GetCellRect( idCurrentCell.row, idCurrentCell.col, &TextRect);
+						pCell->GetTipTextRect( &TextRect);
+						m_TitleTip.Show(TextRect, pCell->GetTipText(),  0, NULL,
+							pCell->GetFont(),  GetTitleTipTextClr(), GetTitleTipBackClr());
 					}
+					else*/
                     if (!m_bRMouseButtonDown
 						&& szTipText && szTipText[0]
                         && !pCell->IsEditing()
@@ -5825,6 +5829,9 @@ void CGridCtrl::OnMouseMove(UINT /*nFlags*/, CPoint point)
                         && GetCellRect(idCurrentCell.row, idCurrentCell.col, CellRect) )
                     {
 //						TRACE0("Showing TitleTip\n");
+//						CSize sz = GetTextExtent(idCurrentCell.row, idCurrentCell.col,pCell->GetTipText());
+//						CellRect.right = CellRect.left + sz.cx;
+//						CellRect.bottom = CellRect.top + sz.cy;
 						m_TitleTip.Show(TextRect, pCell->GetTipText(),  0, CellRect,
                                         pCell->GetFont(),  GetTitleTipTextClr(), GetTitleTipBackClr());
                     }

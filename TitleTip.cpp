@@ -190,12 +190,16 @@ void CTitleTip::Show(CRect rectTitle, LPCTSTR lpszTitleText, int xoffset /*=0*/,
 	rectDisplay.right = rectDisplay.left + size.cx + xoffset;
     
     // Do not display if the text fits within available space
-    if ( rectDisplay.right > rectTitle.right-xoffset )
+	if (rectDisplay.right > rectTitle.right-xoffset)  //--sery �����
+//    if ( (rectDisplay.right > rectTitle.right-xoffset  && rectDisplay.Height() < m_rectHover.Height()-2) || lpHoverRect==NULL)
     {
 		// Show the titletip
-        SetWindowPos( &wndTop, rectDisplay.left, rectDisplay.top, 
-            rectDisplay.Width(), rectDisplay.Height(), 
-            SWP_SHOWWINDOW|SWP_NOACTIVATE );
+//        SetWindowPos( &wndTop, rectDisplay.left, rectDisplay.top, 
+//            rectDisplay.Width(), rectDisplay.Height(), 
+//            SWP_SHOWWINDOW|SWP_NOACTIVATE );
+		SetWindowPos( &wndTop, rectDisplay.left, rectDisplay.top+1.5*size.cy, 
+			rectDisplay.Width(), 1.5*size.cy, 
+			SWP_SHOWWINDOW|SWP_NOACTIVATE );
         
         // FNA - handle colors correctly
         if (crBackClr != CLR_DEFAULT)

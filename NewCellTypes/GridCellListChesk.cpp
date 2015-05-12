@@ -83,6 +83,7 @@ void CInPlaceListCheck::EndEdit()
 			str+="\r\n";
 		}
 	}
+	str.Trim();
 
 	// Send Notification to parent
 	GV_DISPINFO dispinfo;
