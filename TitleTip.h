@@ -76,6 +76,8 @@ protected:
 protected:
 	//{{AFX_MSG(CTitleTip)
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);    // sery
+
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

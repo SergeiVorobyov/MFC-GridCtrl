@@ -84,6 +84,7 @@ CTitleTip::~CTitleTip()
 BEGIN_MESSAGE_MAP(CTitleTip, CWnd)
 	//{{AFX_MSG_MAP(CTitleTip)
 	ON_WM_MOUSEMOVE()
+	ON_WM_RBUTTONUP()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -233,6 +234,28 @@ void CTitleTip::Hide()
         ReleaseCapture();
 
 	ShowWindow( SW_HIDE );
+}
+void CTitleTip::OnRButtonUp(UINT nFlags, CPoint point)		//sery
+{
+	if (m_rectHover.PtInRect(point)) 
+	{
+		Hide();
+
+		// Forward the message
+		ClientToScreen( &point );
+
+		CWnd *pWnd = m_pParentWnd;
+
+		int hittest = (int)pWnd->SendMessage(WM_NCHITTEST,0,MAKELONG(point.x,point.y));
+
+		if (hittest == HTCLIENT) {
+			pWnd->ScreenToClient( &point );
+			pWnd->PostMessage( WM_RBUTTONUP, nFlags, MAKELONG(point.x,point.y) );
+		} else {
+			pWnd->PostMessage( WM_NCRBUTTONUP, hittest, MAKELONG(point.x,point.y) );
+		}
+	}
+//	CWnd::OnRButtonUp(nFlags, point);
 }
 
 void CTitleTip::OnMouseMove(UINT nFlags, CPoint point) 
