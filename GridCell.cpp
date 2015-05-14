@@ -228,7 +228,8 @@ CGridDefaultCell::CGridDefaultCell()
 #else // not CE
 
     NONCLIENTMETRICS ncm;
-#if defined(_MSC_VER) && (_MSC_VER < 1300)
+//#if defined(_MSC_VER) && (_MSC_VER < 1300)
+#if ((defined(_MSC_VER) && (_MSC_VER < 1500)) || (defined(WINVER) && (WINVER < 0x0600)))
     ncm.cbSize = sizeof(NONCLIENTMETRICS); // NONCLIENTMETRICS has an extra element after VC6
 #else
     // Check the operating system's version
