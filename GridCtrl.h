@@ -499,6 +499,10 @@ public:
     BOOL SortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending, LPARAM data = 0);
 
 	void SetCompareFunction(PFNLVCOMPARE pfnCompare);
+//sery
+	void SetCompareFunction(PFNLVCOMPARE pfnCompare,LPARAM data);
+	BOOL SerySortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending, LPARAM data,
+		int low, int high);
 
 	// in-built sort functions
 	static int CALLBACK pfnCellTextCompare(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
@@ -581,6 +585,7 @@ protected:
     BOOL SortTextItems(int nCol, BOOL bAscending, int low, int high);
     BOOL SortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending, LPARAM data,
                    int low, int high);
+
 
     CPoint GetPointClicked(int nRow, int nCol, const CPoint& point);
 
@@ -716,6 +721,7 @@ protected:
     int          m_bAscending;
     int          m_nSortColumn;
 	PFNLVCOMPARE m_pfnCompare;
+	LPARAM dataParam;
 
     // EFW - Added to support shaded/unshaded printout.  If true, colored
     // cells will print as-is.  If false, all text prints as black on white.

@@ -196,6 +196,8 @@ UINT GetMouseScrollLines()
 
 CGridCtrl::CGridCtrl(int nRows, int nCols, int nFixedRows, int nFixedCols)
 {
+	//sery
+	dataParam = 0;
     RegisterWindowClass();
 
 #if !defined(GRIDCONTROL_NO_DRAGDROP) || !defined(GRIDCONTROL_NO_CLIPBOARD)
@@ -4409,7 +4411,7 @@ BOOL CGridCtrl::SortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending,
     SetSortAscending(bAscending);
     ResetSelectedRange();
     SetFocusCell(-1, -1);
-    return SortItems(pfnCompare, nCol, bAscending, data, GetFixedRowCount(), -1);
+    return SerySortItems(pfnCompare, nCol, bAscending, data, GetFixedRowCount(), -1);
 }
 
 int CALLBACK CGridCtrl::pfnCellTextCompare(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
@@ -4534,6 +4536,30 @@ BOOL CGridCtrl::SortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending, LP
     return TRUE;
 }
 
+//sery
+void CGridCtrl::SetCompareFunction(PFNLVCOMPARE pfnCompare,LPARAM data)
+{
+	m_pfnCompare = pfnCompare;
+	dataParam = data;
+}
+
+BOOL CGridCtrl::SerySortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending, LPARAM data,
+	int low, int high)
+{
+	if (nCol >= GetColumnCount())
+		return FALSE;
+
+	if (high == -1)
+		high = GetRowCount() - 1;
+
+	int lo = low;
+	int hi = high;
+
+	if (hi <= lo)
+		return FALSE;
+
+	return pfnCompare((LPARAM) nCol, (LPARAM)dataParam, bAscending);
+}
 /////////////////////////////////////////////////////////////////////////////
 // CGridCtrl data functions
 
