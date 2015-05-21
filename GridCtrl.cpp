@@ -1355,7 +1355,11 @@ void CGridCtrl::OnEndInPlaceEdit(NMHDR* pNMHDR, LRESULT* pResult)
     case VK_HOME:
     case VK_END:
         OnKeyDown((UINT)pgvItem->lParam, 0, 0);
-        OnEditCell(m_idCurrentCell.row, m_idCurrentCell.col, CPoint( -1, -1), (UINT)pgvItem->lParam);
+        //OnEditCell(m_idCurrentCell.row, m_idCurrentCell.col, CPoint( -1, -1), (UINT)pgvItem->lParam); sery
+		break;	//sery ������� ���� �� RETURN ������ ����� ����
+	case VK_RETURN:
+		OnKeyDown((UINT)VK_DOWN, 0, 0);
+		break;
     }
 
     *pResult = 0;
@@ -7556,7 +7560,13 @@ void CGridCtrl::OnEditCell(int nRow, int nCol, CPoint point, UINT nChar)
     // Can we do it?
     CCellID cell(nRow, nCol);
     if (!IsValid(cell) || !IsCellEditable(nRow, nCol))
+	{
+		if (!IsCellEditable(nRow, nCol))
+		{
+			SendMessageToParent(nRow, nCol, GVN_BEGINLABELEDIT);
+		}
         return;
+	}
 
     // Can we see what we are doing?
     EnsureVisible(nRow, nCol);
