@@ -53,6 +53,7 @@ static char THIS_FILE[] = __FILE__;
 
 CComboEdit::CComboEdit()
 {
+	flagChange = FALSE;
 }
 
 CComboEdit::~CComboEdit()
@@ -99,6 +100,13 @@ void CComboEdit::OnKillFocus(CWnd* pNewWnd)
 
 void CComboEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
+	if((nChar == VK_DOWN || nChar == VK_UP) && flagChange)
+	{
+		CWnd* pOwner = GetOwner();
+		if (pOwner)
+			pOwner->SendMessage(WM_KEYUP, VK_RETURN, nRepCnt + (((DWORD)nFlags)<<16));
+		return;
+	}
 	if ((nChar == VK_PRIOR || nChar == VK_NEXT ||
 		 nChar == VK_DOWN  || nChar == VK_UP   ||
 		 nChar == VK_RIGHT || nChar == VK_LEFT) &&
@@ -109,7 +117,7 @@ void CComboEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
             pOwner->SendMessage(WM_KEYDOWN, nChar, nRepCnt+ (((DWORD)nFlags)<<16));
         return;
     }
-
+	flagChange = TRUE;
 	CEdit::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
@@ -351,8 +359,12 @@ void CInPlaceList::OnKillFocus(CWnd* pNewWnd)
         return;
 
     // Only end editing on change of focus if we're using the CBS_DROPDOWNLIST style
-    if ((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST)
+    if ((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST) 
+	{
+		TRACE(L"CInPlaceList::OnKillFocus - 1\n");
         EndEdit();
+		TRACE(L"CInPlaceList::OnKillFocus - 2\n");
+	}
 }
 
 // If an arrow key (or associated) is pressed, then exit if
@@ -360,6 +372,14 @@ void CInPlaceList::OnKillFocus(CWnd* pNewWnd)
 //  b) m_bExitOnArrows == TRUE
 void CInPlaceList::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
+	if ((nChar == VK_DOWN  || nChar == VK_UP  ))
+	{
+		m_nLastChar = nChar;
+		GetParent()->SetFocus();
+		return;
+	}
+
+
 	if ((nChar == VK_PRIOR || nChar == VK_NEXT ||
 		 nChar == VK_DOWN  || nChar == VK_UP   ||
 		 nChar == VK_RIGHT || nChar == VK_LEFT) &&
@@ -418,7 +438,7 @@ CGridCellCombo::CGridCellCombo() : CGridCell()
 BOOL CGridCellCombo::Edit(int nRow, int nCol, CRect rect, CPoint /* point */, UINT nID, UINT nChar)
 {
     m_bEditing = TRUE;
-    
+    TRACE(L"CGridCellCombo::Edit\n");
     // CInPlaceList auto-deletes itself
     m_pEditWnd = new CInPlaceList(GetGrid(), rect, GetStyle(), nID, nRow, nCol, 
                                   GetTextClr(), GetBackClr(), m_Strings, GetText(), nChar);

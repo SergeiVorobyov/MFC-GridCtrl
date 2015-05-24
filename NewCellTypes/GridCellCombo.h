@@ -79,6 +79,7 @@ public:
 
 // Attributes
 public:
+	BOOL flagChange;//sery
 
 // Operations
 public:

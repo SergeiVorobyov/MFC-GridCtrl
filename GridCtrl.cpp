@@ -1355,7 +1355,7 @@ void CGridCtrl::OnEndInPlaceEdit(NMHDR* pNMHDR, LRESULT* pResult)
     case VK_HOME:
     case VK_END:
         OnKeyDown((UINT)pgvItem->lParam, 0, 0);
-        //OnEditCell(m_idCurrentCell.row, m_idCurrentCell.col, CPoint( -1, -1), (UINT)pgvItem->lParam); sery
+//        OnEditCell(m_idCurrentCell.row, m_idCurrentCell.col, CPoint( -1, -1), (UINT)pgvItem->lParam); //sery
 		break;	//sery ������� ���� �� RETURN ������ ����� ����
 	case VK_RETURN:
 		OnKeyDown((UINT)VK_DOWN, 0, 0);
@@ -6121,6 +6121,13 @@ void CGridCtrl::OnLButtonDown(UINT nFlags, CPoint point)
         return;
 	m_CurRow = m_LeftClickDownCell.row;
 
+#ifdef _DEBUG
+
+	if(m_LeftClickDownCell.col == 11)
+	{
+		int ttt=0;
+	}
+#endif
     // If the SHIFT key is not down, then the start of the selection area should be the 
     // cell just clicked. Otherwise, keep the previous selection-start-cell so the user
     // can add to their previous cell selections in an intuitive way. If no selection-
