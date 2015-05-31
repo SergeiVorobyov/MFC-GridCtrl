@@ -568,8 +568,9 @@ protected:
 
     BOOL MouseOverRowResizeArea(CPoint& point);
     BOOL MouseOverColumnResizeArea(CPoint& point);
-
+public:		//sery
     CCellID GetTopleftNonFixedCell(BOOL bForceRecalculation = FALSE);
+protected:
     CCellRange GetUnobstructedNonFixedCellRange(BOOL bForceRecalculation = FALSE);
     CCellRange GetVisibleNonFixedCellRange(LPRECT pRect = NULL, BOOL bForceRecalculation = FALSE);
     CCellRange GetVisibleFixedCellRange(LPRECT pRect = NULL, BOOL bForceRecalculation = FALSE);
