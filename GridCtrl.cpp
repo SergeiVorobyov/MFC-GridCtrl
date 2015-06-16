@@ -7497,7 +7497,10 @@ void CGridCtrl::OnFixedRowClick(CCellID& cell)
         if (cell.col == GetSortColumn())
             SortItems(cell.col, !GetSortAscending());
         else
-            SortItems(cell.col, TRUE);
+		{
+			SortItems(cell.col, !GetSortAscending()); //sery
+//            SortItems(cell.col, TRUE);
+		}
         Invalidate();
     }
 
