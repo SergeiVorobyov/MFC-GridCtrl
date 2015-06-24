@@ -100,13 +100,14 @@ void CComboEdit::OnKillFocus(CWnd* pNewWnd)
 
 void CComboEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	if((nChar == VK_DOWN || nChar == VK_UP) && flagChange)
+	//sery
+/*	if((nChar == VK_DOWN || nChar == VK_UP) && flagChange)
 	{
 		CWnd* pOwner = GetOwner();
 		if (pOwner)
 			pOwner->SendMessage(WM_KEYUP, VK_RETURN, nRepCnt + (((DWORD)nFlags)<<16));
 		return;
-	}
+	}*/
 	if ((nChar == VK_PRIOR || nChar == VK_NEXT ||
 		 nChar == VK_DOWN  || nChar == VK_UP   ||
 		 nChar == VK_RIGHT || nChar == VK_LEFT) &&
@@ -322,9 +323,10 @@ BEGIN_MESSAGE_MAP(CInPlaceList, CComboBox)
 	//ON_CONTROL_REFLECT(CBN_SELENDOK, OnSelendOK)
 END_MESSAGE_MAP()
 
-void CInPlaceList::OnSelchange()
+
+
+void CInPlaceList::OnSelchange()   //sery
 {
-	// TODO: Add your control notification handler code here
 	int iIndex = GetCurSel(); 
 	if( iIndex != CB_ERR) 
 	{ 
@@ -333,9 +335,19 @@ void CInPlaceList::OnSelchange()
 
 		if (!((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST)) 
 			m_edit.SetWindowText( strLbText); 
-	} 
+	}
+	else
+	{
+		CString strLbText; 
+		GetLBText( iIndex, strLbText); 
 
-	GetParent()->SetFocus(); 	
+		if (!((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST)) 
+			m_edit.SetWindowText( strLbText); 
+		GetParent()->SetFocus(); 
+
+	}
+
+//	GetParent()->SetFocus(); 	
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -372,12 +384,13 @@ void CInPlaceList::OnKillFocus(CWnd* pNewWnd)
 //  b) m_bExitOnArrows == TRUE
 void CInPlaceList::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	if ((nChar == VK_DOWN  || nChar == VK_UP  ))
+	//sery
+/*	if ((nChar == VK_DOWN  || nChar == VK_UP  ))
 	{
 		m_nLastChar = nChar;
 		GetParent()->SetFocus();
 		return;
-	}
+	}*/
 
 
 	if ((nChar == VK_PRIOR || nChar == VK_NEXT ||
