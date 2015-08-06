@@ -568,8 +568,12 @@ protected:
 
     BOOL MouseOverRowResizeArea(CPoint& point);
     BOOL MouseOverColumnResizeArea(CPoint& point);
-public:		//sery
+public:		//sery ��������� � public
     CCellID GetTopleftNonFixedCell(BOOL bForceRecalculation = FALSE);
+    void EnableScrollBars(int nBar, BOOL bEnable = TRUE);
+    void ResetScrollBars();
+    int  GetScrollPos32(int nBar, BOOL bGetTrackPos = FALSE);
+	BOOL SetScrollPos32(int nBar, int nPos, BOOL bRedraw = TRUE);
 protected:
     CCellRange GetUnobstructedNonFixedCellRange(BOOL bForceRecalculation = FALSE);
     CCellRange GetVisibleNonFixedCellRange(LPRECT pRect = NULL, BOOL bForceRecalculation = FALSE);
@@ -578,10 +582,6 @@ protected:
     BOOL IsVisibleVScroll() { return ( (m_nBarState & GVL_VERT) > 0); } 
     BOOL IsVisibleHScroll() { return ( (m_nBarState & GVL_HORZ) > 0); }
     void ResetSelectedRange();
-    void ResetScrollBars();
-    void EnableScrollBars(int nBar, BOOL bEnable = TRUE);
-    int  GetScrollPos32(int nBar, BOOL bGetTrackPos = FALSE);
-    BOOL SetScrollPos32(int nBar, int nPos, BOOL bRedraw = TRUE);
 
     BOOL SortTextItems(int nCol, BOOL bAscending, int low, int high);
     BOOL SortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending, LPARAM data,

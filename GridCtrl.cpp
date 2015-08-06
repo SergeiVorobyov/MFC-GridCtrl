@@ -1374,7 +1374,9 @@ void CGridCtrl::OnHScroll(UINT nSBCode, UINT /*nPos*/, CScrollBar* /*pScrollBar*
     m_TitleTip.Hide();  // hide any titletips
 #endif
 
-    int scrollPos = GetScrollPos32(SB_HORZ);
+
+	
+	int scrollPos = GetScrollPos32(SB_HORZ);
 
     CCellID idTopLeft = GetTopleftNonFixedCell();
 
@@ -1483,6 +1485,8 @@ void CGridCtrl::OnHScroll(UINT nSBCode, UINT /*nPos*/, CScrollBar* /*pScrollBar*
     default: 
         break;
     }
+	SendMessageToParent(0, 0, WM_HSCROLL);
+
 }
 
 // Handle vert scrollbar notifications
@@ -6533,6 +6537,7 @@ void CGridCtrl::OnLButtonUp(UINT nFlags, CPoint point)
             SetColumnWidth(m_LeftClickDownCell.col, nColumnWidth);
             ResetScrollBars();
             Invalidate();
+			SendMessageToParent(0, m_LeftClickDownCell.col, LVN_ITEMCHANGED);
         }
     }
     else if (m_MouseMode == MOUSE_SIZING_ROW)
