@@ -500,6 +500,7 @@ public:
 
 	void SetCompareFunction(PFNLVCOMPARE pfnCompare);
 //sery
+	int         m_nVScrollMax, m_nHScrollMax;	
 	void SetCompareFunction(PFNLVCOMPARE pfnCompare,LPARAM data);
 	BOOL SerySortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending, LPARAM data,
 		int low, int high);
@@ -671,7 +672,7 @@ protected:
     // Cell size details
     int         m_nRows, m_nFixedRows, m_nCols, m_nFixedCols;
     CUIntArray  m_arRowHeights, m_arColWidths;
-    int         m_nVScrollMax, m_nHScrollMax;
+
 
     // Fonts and images
     CRuntimeClass*   m_pRtcDefault; // determines kind of Grid Cell created by default
