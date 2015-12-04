@@ -339,7 +339,8 @@ void CInPlaceList::OnSelchange()   //sery
 	else
 	{
 		CString strLbText; 
-		GetLBText( iIndex, strLbText); 
+		GetWindowText(strLbText);
+//		GetLBText( iIndex, strLbText); 
 
 		if (!((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST)) 
 			m_edit.SetWindowText( strLbText); 
