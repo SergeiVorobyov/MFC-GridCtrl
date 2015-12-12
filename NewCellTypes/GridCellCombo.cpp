@@ -335,6 +335,27 @@ void CInPlaceList::OnSelchange()   //sery
 
 		if (!((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST)) 
 			m_edit.SetWindowText( strLbText); 
+
+		{
+			GV_DISPINFO dispinfo;
+
+			dispinfo.hdr.hwndFrom = GetSafeHwnd();
+			dispinfo.hdr.idFrom   = GetDlgCtrlID();
+			dispinfo.hdr.code     = GVN_ENDLABELEDIT;
+
+			dispinfo.item.mask    = LVIF_TEXT|LVIF_PARAM;
+			dispinfo.item.row     = m_nRow;
+			dispinfo.item.col     = m_nCol;
+			dispinfo.item.strText  = strLbText;
+			dispinfo.item.lParam  = (LPARAM) iIndex;
+			CWnd* pOwner = GetOwner();
+			if (IsWindow(pOwner->GetSafeHwnd()))
+				pOwner->SendMessage(WM_NOTIFY, GetDlgCtrlID(), (LPARAM)&dispinfo );
+
+		}
+		GetParent()->SetFocus(); 
+
+
 	}
 	else
 	{
