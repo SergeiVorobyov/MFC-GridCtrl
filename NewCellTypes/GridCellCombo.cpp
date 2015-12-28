@@ -101,13 +101,17 @@ void CComboEdit::OnKillFocus(CWnd* pNewWnd)
 void CComboEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
 	//sery
-/*	if((nChar == VK_DOWN || nChar == VK_UP) && flagChange)
+	DWORD nc =  GetDlgCtrlID();
+	if((nChar == VK_DOWN || nChar == VK_UP))
 	{
 		CWnd* pOwner = GetOwner();
 		if (pOwner)
-			pOwner->SendMessage(WM_KEYUP, VK_RETURN, nRepCnt + (((DWORD)nFlags)<<16));
+		{
+			pOwner->SendMessage(WM_KEYDOWN, nChar,nRepCnt + 0);
+//			pOwner->SendMessage(WM_KEYUP, nChar, nRepCnt + (((DWORD)nFlags)<<16));
+		}
 		return;
-	}*/
+	}
 	if ((nChar == VK_PRIOR || nChar == VK_NEXT ||
 		 nChar == VK_DOWN  || nChar == VK_UP   ||
 		 nChar == VK_RIGHT || nChar == VK_LEFT) &&
@@ -139,6 +143,24 @@ void CComboEdit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
             pOwner->SendMessage(WM_KEYUP, nChar, nRepCnt + (((DWORD)nFlags)<<16));
         return;
     }
+	CString str;
+	GetWindowText(str);
+	if(str != "")
+	{
+		CWnd* pOwner = GetOwner();
+		if (pOwner)
+		{
+			int iSel = pOwner->SendMessage(CB_FINDSTRING, 0,(LPARAM) str.GetBuffer());
+			str.ReleaseBuffer();
+			if(iSel != -1)
+			{
+				pOwner->SendMessage(CB_SETCURSEL, iSel,NULL);
+				return;
+			}
+		}
+
+
+	}
 
 	CEdit::OnKeyUp(nChar, nRepCnt, nFlags);
 }
@@ -171,8 +193,28 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
 	if (!Create(dwComboStyle, rect, pParent, nID)) return;
 
 	// Add the strings
+	int iSel = -1;
+	int iFirstSel = -1;
+	CString s=" ",ss;
+	s.SetAt(0,nFirstChar);
+	s.MakeUpper();
+	s.Trim();
 	for (int i = 0; i < Items.GetSize(); i++) 
-		AddString(Items[i]);
+	{
+		int iItem = AddString(Items[i]);
+		ss = Items[i];
+		ss.MakeUpper();
+		if(s == ss && iSel==-1)
+		{
+			iSel = iItem;
+		}
+		else
+		{
+			ss = ss.Mid(0,1);
+			if(ss == s && iFirstSel==-1)
+				iFirstSel = i;
+		}
+	}
 
 	SetFont(pParent->GetFont());
 	SetItemHeight(-1, nHeight);
@@ -215,10 +257,60 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
             case VK_END:      m_edit.SetSel(0,-1); return;
             default:          m_edit.SetSel(0,-1);
         }
-        SendMessage(WM_CHAR, nFirstChar);
+		SendMessage(WM_CHAR, nFirstChar);
+
+		if(iSel != -1)
+		{
+			SetCurSel(iSel);
+//			OnKeyUp(13, 0, 0) ;
+		}
+		else
+		{
+			if(iFirstSel != -1)
+			{
+				SetCurSel(iFirstSel);
+//				OnKeyUp(13, 0, 0) ;
+			}
+			else
+			{
+				if(nFirstChar >= '!' )
+				{
+//					MessageBeep(-1);
+//					MessageBox("Неверный символ","",0);
+
+				}
+			}
+		}
+
+
     }
     else
+	{
+		//sery добавил позиционирование по первому символу
+		if(iSel != -1)
+		{
+			SetCurSel(iSel);
+			OnKeyUp(13, 0, 0) ;
+		}
+		else
+		{
+			if(iFirstSel != -1)
+			{
+				SetCurSel(iFirstSel);
+				OnKeyUp(13, 0, 0) ;
+			}
+			else
+			{
+				if(nFirstChar >= '!' )
+				{
+					MessageBeep(-1);
+					MessageBox("Неверный символ","",0);
+
+				}
+			}
+		}
  	    SetFocus();
+	}
 }
 
 CInPlaceList::~CInPlaceList()
@@ -365,7 +457,8 @@ void CInPlaceList::OnSelchange()   //sery
 
 		if (!((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST)) 
 			m_edit.SetWindowText( strLbText); 
-		GetParent()->SetFocus(); 
+//		CWnd *pWnd = GetParent();
+//		GetParent()->SetFocus(); 
 
 	}
 
@@ -407,12 +500,21 @@ void CInPlaceList::OnKillFocus(CWnd* pNewWnd)
 void CInPlaceList::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
 	//sery
-/*	if ((nChar == VK_DOWN  || nChar == VK_UP  ))
+	if ((nChar == VK_DOWN  || nChar == VK_UP  ))
 	{
+		int iItem = GetCurSel();
+		if(iItem != -1)
+		{
+			if(nChar == VK_DOWN)
+				SetCurSel(iItem+1);
+			else
+				if(iItem != 0)
+					SetCurSel(iItem-1);
+		}
 		m_nLastChar = nChar;
-		GetParent()->SetFocus();
+//		GetParent()->SetFocus();
 		return;
-	}*/
+	}
 
 
 	if ((nChar == VK_PRIOR || nChar == VK_NEXT ||
@@ -422,6 +524,18 @@ void CInPlaceList::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	{
 		m_nLastChar = nChar;
 		GetParent()->SetFocus();
+		return;
+	}
+
+	if (!((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST)) 
+	if ( nChar == VK_RETURN )
+	{
+		m_nLastChar = nChar;
+		int iItem = GetCurSel();
+		if(iItem != -1)
+		{
+			return;
+		}
 		return;
 	}
 
