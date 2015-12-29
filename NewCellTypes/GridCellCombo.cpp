@@ -107,7 +107,7 @@ void CComboEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		CWnd* pOwner = GetOwner();
 		if (pOwner)
 		{
-			pOwner->SendMessage(WM_KEYDOWN, nChar,nRepCnt + 0);
+			pOwner->SendMessage(WM_KEYDOWN, nChar,nRepCnt + (((DWORD)nFlags)<<16));
 //			pOwner->SendMessage(WM_KEYUP, nChar, nRepCnt + (((DWORD)nFlags)<<16));
 		}
 		return;
@@ -128,6 +128,8 @@ void CComboEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CComboEdit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
+	CString str;
+	GetWindowText(str);
 	if (nChar == VK_ESCAPE) 
 	{
         CWnd* pOwner = GetOwner();
@@ -143,20 +145,18 @@ void CComboEdit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
             pOwner->SendMessage(WM_KEYUP, nChar, nRepCnt + (((DWORD)nFlags)<<16));
         return;
     }
-	CString str;
-	GetWindowText(str);
 	if(str != "")
 	{
 		CWnd* pOwner = GetOwner();
 		if (pOwner)
 		{
-			int iSel = pOwner->SendMessage(CB_FINDSTRING, 0,(LPARAM) str.GetBuffer());
-			str.ReleaseBuffer();
-			if(iSel != -1)
+//			int iSel = pOwner->SendMessage(CB_FINDSTRINGEXACT, 0,(LPARAM) str.GetBuffer());
+//			str.ReleaseBuffer();
+/*			if(iSel != -1)
 			{
 				pOwner->SendMessage(CB_SETCURSEL, iSel,NULL);
 				return;
-			}
+			}*/
 		}
 
 
@@ -268,7 +268,7 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
 		{
 			if(iFirstSel != -1)
 			{
-				SetCurSel(iFirstSel);
+//				SetCurSel(iFirstSel);
 //				OnKeyUp(13, 0, 0) ;
 			}
 			else
@@ -500,10 +500,26 @@ void CInPlaceList::OnKillFocus(CWnd* pNewWnd)
 void CInPlaceList::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
 	//sery
+	CString s;
+	GetWindowText(s);
+	s.Trim();
 	if ((nChar == VK_DOWN  || nChar == VK_UP  ))
 	{
+		m_nLastChar = nChar;
 		int iItem = GetCurSel();
-		if(iItem != -1)
+		if(iItem == -1)
+		{
+			if(s != "")
+			{
+				iItem = SendMessage(CB_FINDSTRING, -1,(LPARAM) s.GetBuffer());
+				s.ReleaseBuffer();
+			}
+			if(iItem == -1)
+				iItem = 0;
+			SetCurSel(iItem);
+			return;
+		}
+		else
 		{
 			if(nChar == VK_DOWN)
 				SetCurSel(iItem+1);
@@ -511,7 +527,6 @@ void CInPlaceList::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				if(iItem != 0)
 					SetCurSel(iItem-1);
 		}
-		m_nLastChar = nChar;
 //		GetParent()->SetFocus();
 		return;
 	}
