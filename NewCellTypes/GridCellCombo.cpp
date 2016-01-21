@@ -130,6 +130,19 @@ void CComboEdit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	CString str;
 	GetWindowText(str);
+	if(str == "" && nChar == VK_RETURN)
+	{
+		int hh=0;
+		CWnd* pOwner = GetOwner();
+		if (pOwner)
+		{
+			CWnd* pParent = pOwner->GetParent();
+			if(pParent)
+				pParent->SetFocus();
+//			pOwner->SendMessage(WM_KEYUP, VK_DOWN, nRepCnt + (((DWORD)nFlags)<<16));
+		}
+		return;
+	}
 	if (nChar == VK_ESCAPE) 
 	{
         CWnd* pOwner = GetOwner();
