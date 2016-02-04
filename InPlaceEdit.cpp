@@ -67,6 +67,9 @@ CInPlaceEdit::CInPlaceEdit(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
     m_nLastChar     = 0; 
     m_bExitOnArrows = (nFirstChar != VK_LBUTTON);    // If mouse click brought us here,
                                                      // then no exit on arrows
+	//sery
+	if(nFirstChar == 32 || nFirstChar == VK_RETURN)
+		m_bExitOnArrows = FALSE;
 
     m_Rect = rect;  // For bizarre CE bug.
     
