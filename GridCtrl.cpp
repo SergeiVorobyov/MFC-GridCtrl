@@ -5555,7 +5555,8 @@ void CGridCtrl::EnsureVisible(int nRow, int nCol)
         SendMessage(WM_HSCROLL, SB_LINERIGHT, 0);
         if (!GetCellRect(nRow, nCol, rectCell))
         {
-            pFocusWnd->SetFocus(); 
+			if(pFocusWnd && IsWindow(pFocusWnd->m_hWnd))
+	            pFocusWnd->SetFocus(); 
             return;
         }
     }
@@ -5568,13 +5569,15 @@ void CGridCtrl::EnsureVisible(int nRow, int nCol)
         SendMessage(WM_VSCROLL, SB_LINEDOWN, 0);
         if (!GetCellRect(nRow, nCol, rectCell))
         {
-            pFocusWnd->SetFocus(); 
+			if(pFocusWnd && IsWindow(pFocusWnd->m_hWnd))
+	            pFocusWnd->SetFocus(); 
             return;
         }
     }
 
     // restore focus to whoever owned it
-    pFocusWnd->SetFocus(); 
+	if(pFocusWnd && IsWindow(pFocusWnd->m_hWnd))
+		pFocusWnd->SetFocus(); 
 }
 
 BOOL CGridCtrl::IsCellEditable(CCellID &cell) const
