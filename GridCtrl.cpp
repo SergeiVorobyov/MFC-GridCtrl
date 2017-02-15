@@ -130,6 +130,8 @@ namespace gridctrl {
 
 #pragma warning(disable:4996)
 
+
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -2373,6 +2375,9 @@ COleDataSource* CGridCtrl::CopyTextFromGrid()
     if (!IsValid(Selection))
         return NULL;
 
+
+
+
     if (GetVirtualMode())
         SendCacheHintToParent(Selection);
 
@@ -2429,9 +2434,11 @@ COleDataSource* CGridCtrl::CopyTextFromGrid()
     if (!hMem)
         return NULL;
 
+
     // Cache data
     COleDataSource* pSource = new COleDataSource();
     pSource->CacheGlobalData(CF_TEXT, hMem);
+
 
     return pSource;
 }
@@ -2759,11 +2766,14 @@ void CGridCtrl::OnEditCut()
 
 void CGridCtrl::OnEditCopy()
 {
+
     COleDataSource* pSource = CopyTextFromGrid();
     if (!pSource)
         return;
 
     pSource->SetClipboard();
+
+
 }
 
 void CGridCtrl::OnEditPaste()
