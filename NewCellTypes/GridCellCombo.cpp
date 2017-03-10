@@ -240,15 +240,21 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
 	MoveWindow(rect);
     */
 
+
 	SetDroppedWidth(nMaxLength);
 
 	SetHorizontalExtent(0); // no horz scrolling
+
 
 	// Set the initial text to m_sInitText
     if (::IsWindow(m_hWnd) && SelectString(-1, m_sInitText) == CB_ERR) 
 		SetWindowText(m_sInitText);		// No text selected, so restore what was there before
 
-    ShowDropDown();
+	CRect rc;
+	GetDroppedControlRect(rc);
+	ShowDropDown();
+
+
 
     // Subclass the combobox edit control if style includes CBS_DROPDOWN
     if ((dwStyle & CBS_DROPDOWNLIST) != CBS_DROPDOWNLIST)
@@ -325,6 +331,8 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
  	    SetFocus();
 	}
 }
+
+
 
 CInPlaceList::~CInPlaceList()
 {
@@ -489,6 +497,37 @@ UINT CInPlaceList::OnGetDlgCode()
 void CInPlaceList::OnDropdown() 
 {
     SetDroppedWidth(GetCorrectDropWidth());
+
+	// Make sure the drop rect for this combobox is at least tall enough to 
+	// show 3 items in the dropdown list.
+	int nHeight = 0;
+	int nItemsToShow = max(3, GetCount()/3);
+	nItemsToShow = 10;
+	for (int i = 0; i < nItemsToShow; i++)
+	{
+		int nItemH = GetItemHeight(i);
+		nHeight += nItemH;
+	}
+
+	nHeight += (4 * ::GetSystemMetrics(SM_CYEDGE));
+
+	// Set the height if necessary -- save current size first
+	COMBOBOXINFO cmbxInfo;
+	cmbxInfo.cbSize = sizeof(COMBOBOXINFO);
+	if (GetComboBoxInfo(&cmbxInfo))
+	{
+		CRect rcListBox;
+		::GetWindowRect(cmbxInfo.hwndList, &rcListBox);
+
+		if (rcListBox.Height() < nHeight)
+		{
+			::SetWindowPos(cmbxInfo.hwndList, 0, 0, 0, rcListBox.Width(),
+				nHeight, SWP_NOMOVE | SWP_NOZORDER);
+		}
+	}
+	// Pass on to parent for further handling
+	return ;
+
 }
 
 void CInPlaceList::OnKillFocus(CWnd* pNewWnd) 

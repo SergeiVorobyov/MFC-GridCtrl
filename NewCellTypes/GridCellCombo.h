@@ -143,6 +143,7 @@ public:
 	virtual ~CInPlaceList();
     void EndEdit();
 
+
 protected:
     int GetCorrectDropWidth();
 
