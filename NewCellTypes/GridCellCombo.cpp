@@ -202,8 +202,12 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
  	DWORD dwComboStyle = WS_BORDER|WS_CHILD|WS_VISIBLE|WS_VSCROLL|
  					     CBS_AUTOHSCROLL | dwStyle;
 	int nHeight = rect.Height();
-	rect.bottom = rect.bottom + m_nNumLines*nHeight + ::GetSystemMetrics(SM_CYHSCROLL);
+	rect.bottom = rect.bottom +  m_nNumLines*nHeight + ::GetSystemMetrics(SM_CYHSCROLL);
 	if (!Create(dwComboStyle, rect, pParent, nID)) return;
+
+	CRect rc;
+	GetDroppedControlRect(rc);
+
 
 	// Add the strings
 	int iSel = -1;
@@ -228,6 +232,7 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
 				iFirstSel = i;
 		}
 	}
+	GetDroppedControlRect(rc);
 
 	SetFont(pParent->GetFont());
 	SetItemHeight(-1, nHeight);
@@ -242,6 +247,8 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
 
 
 	SetDroppedWidth(nMaxLength);
+	InitStorage(10, nMaxLength+10);
+
 
 	SetHorizontalExtent(0); // no horz scrolling
 
@@ -250,9 +257,13 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
     if (::IsWindow(m_hWnd) && SelectString(-1, m_sInitText) == CB_ERR) 
 		SetWindowText(m_sInitText);		// No text selected, so restore what was there before
 
-	CRect rc;
+//	CRect rc;
 	GetDroppedControlRect(rc);
-	ShowDropDown();
+
+
+
+
+	ShowDropDown(TRUE);
 
 
 
@@ -497,12 +508,10 @@ UINT CInPlaceList::OnGetDlgCode()
 void CInPlaceList::OnDropdown() 
 {
     SetDroppedWidth(GetCorrectDropWidth());
-
 	// Make sure the drop rect for this combobox is at least tall enough to 
 	// show 3 items in the dropdown list.
 	int nHeight = 0;
-	int nItemsToShow = max(3, GetCount()/3);
-	nItemsToShow = 10;
+	int nItemsToShow = max(3, GetCount()/4);
 	for (int i = 0; i < nItemsToShow; i++)
 	{
 		int nItemH = GetItemHeight(i);
