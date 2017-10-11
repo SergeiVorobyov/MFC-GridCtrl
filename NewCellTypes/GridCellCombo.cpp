@@ -534,7 +534,9 @@ void CInPlaceList::OnDropdown()
 				nHeight, SWP_NOMOVE | SWP_NOZORDER);
 		}
 	}
-	// Pass on to parent for further handling
+	// sery code
+	this->SendMessage(CB_SETMINVISIBLE,20,0);
+
 	return ;
 
 }
