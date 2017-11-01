@@ -56,11 +56,11 @@ public:
     void  SetOptions(const CStringArray& ar);
     void  SetStyle(DWORD dwStyle)           { m_dwStyle = dwStyle; }
     DWORD GetStyle()                        { return m_dwStyle;    }
+	CStringArray m_Strings;
 
 protected:
     virtual BOOL Draw(CDC* pDC, int nRow, int nCol, CRect rect, BOOL bEraseBkgnd = TRUE);
 
-    CStringArray m_Strings;
     DWORD        m_dwStyle;
 };
 
