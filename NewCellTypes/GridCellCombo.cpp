@@ -354,6 +354,16 @@ void CInPlaceList::EndEdit()
     CString str;
     if (::IsWindow(m_hWnd))
         GetWindowText(str);
+
+
+//sery
+	if(m_EditTxt != "")
+		str = m_EditTxt;
+	
+//--sery
+
+
+
  
     // Send Notification to parent
     GV_DISPINFO dispinfo;
@@ -613,6 +623,13 @@ void CInPlaceList::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		if(iItem != -1)
 		{
 			return;
+		}
+		else
+		{
+			//sery
+			m_edit.SetWindowText(s);
+			m_EditTxt = s;
+			//--sery
 		}
 		return;
 	}
