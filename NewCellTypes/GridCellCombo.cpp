@@ -627,8 +627,26 @@ void CInPlaceList::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		else
 		{
 			//sery
-			m_edit.SetWindowText(s);
-			m_EditTxt = s;
+//				m_edit.SetWindowText(s);
+//				m_EditTxt = s;
+
+			//--sery
+		}
+		return;
+	}
+	if ( nChar == VK_TAB )
+	{
+		m_nLastChar = nChar;
+		int iItem = GetCurSel();
+		if(iItem != -1)
+		{
+			return;
+		}
+		else
+		{
+			//sery
+				m_edit.SetWindowText(s);
+				m_EditTxt = s;
 			//--sery
 		}
 		return;
@@ -643,19 +661,21 @@ void CInPlaceList::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 	if (nChar == VK_ESCAPE) 
 		SetWindowText(m_sInitText);	// restore previous text
 
-	if (nChar == VK_TAB || nChar == VK_ESCAPE)  //sery
+	if (/*nChar == VK_TAB ||*/ nChar == VK_ESCAPE)  //sery
 	{
 		m_nLastChar = nChar;
 		GetParent()->SetFocus();	// This will destroy this window
 		return;
 	}
-	if ( nChar == VK_RETURN )
+	if ( nChar == VK_RETURN  || nChar == VK_TAB)
 	{
 		CString s;
 		GetWindowText(s);
 		s.Trim();
 		if(s != "")
 		{
+			if ( nChar == VK_TAB)//sery
+				m_EditTxt = s;
 			m_nLastChar = nChar;
 			GetParent()->SetFocus();	// This will destroy this window
 
