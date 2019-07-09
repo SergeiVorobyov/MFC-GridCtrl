@@ -2473,8 +2473,17 @@ BOOL CGridCtrl::PasteTextToGrid(CCellID cell, COleDataObject* pDataObject,
     CString strLine = strText;
     int nLine = 0;
 
+
+//�� ������� ������� ������� ����������� ������������� ������� 
+//�������� (
+//	ValidateAndModifyCellContents(cell.row, cell.col, strLine);	
+//	SetItemState(cell.row, cell.col,
+//	GetItemState(cell.row, cell.col) & ~GVIS_SELECTED);
+
+
     // Find the end of the first line
 	CCellRange PasteRange(cell.row, cell.col,-1,-1);
+
     int nIndex;
     do
     {
@@ -2539,6 +2548,7 @@ BOOL CGridCtrl::PasteTextToGrid(CCellID cell, COleDataObject* pDataObject,
         strLine = strNext;
         nLine++;
     } while (nIndex >= 0);
+	
 
     strText.UnlockBuffer();
 

@@ -73,7 +73,8 @@ CInPlaceEdit::CInPlaceEdit(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
 
     m_Rect = rect;  // For bizarre CE bug.
     
-    DWORD dwEditStyle = WS_BORDER|WS_CHILD|WS_VISIBLE| ES_AUTOHSCROLL //|ES_MULTILINE
+	//sery добавлено | ES_MULTILINE | ES_WANTRETURN
+    DWORD dwEditStyle = WS_BORDER|WS_CHILD|WS_VISIBLE| ES_AUTOHSCROLL | ES_MULTILINE //| ES_WANTRETURN 
         | dwStyle;
     if (!Create(dwEditStyle, rect, pParent, nID)) return;
     
