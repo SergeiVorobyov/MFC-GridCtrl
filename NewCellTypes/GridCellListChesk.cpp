@@ -25,9 +25,11 @@ CInPlaceListCheck::CInPlaceListCheck(CWnd* pParent, CRect& rect, DWORD dwStyle, 
 	m_bExitOnArrows = FALSE; //(nFirstChar != VK_LBUTTON);	// If mouse click brought us here,
 
 	// Create the combobox
- 	DWORD dwComboStyle = WS_BORDER|WS_CHILD|WS_VISIBLE|WS_VSCROLL|
- 					     CBS_AUTOHSCROLL | dwStyle;
-	dwComboStyle = WS_CHILD | LBS_OWNERDRAWFIXED | LBS_HASSTRINGS | WS_BORDER | WS_VSCROLL |WS_VISIBLE;
+ 	DWORD dwComboStyle = WS_BORDER|WS_CHILD|WS_VSCROLL|
+ 					     CBS_AUTOHSCROLL | LBS_HASSTRINGS | LBS_OWNERDRAWFIXED |  dwStyle;
+//	dwComboStyle = WS_CHILD | LBS_OWNERDRAWFIXED | LBS_HASSTRINGS | WS_BORDER | WS_VSCROLL |WS_VISIBLE ;
+
+
 
 	int nHeight = rect.Height();
 	CFont *pFnt = pParent->GetFont();
@@ -37,7 +39,11 @@ CInPlaceListCheck::CInPlaceListCheck(CWnd* pParent, CRect& rect, DWORD dwStyle, 
 
 
 	rect.bottom = rect.bottom + m_nNumLines*nHeight + ::GetSystemMetrics(SM_CYHSCROLL);
+	
 	if (!Create(dwComboStyle, rect, pParent, nID)) return;
+
+
+
 
 	// Add the strings
 	for (int i = 0; i < Items.GetSize(); i++) 
@@ -57,7 +63,22 @@ CInPlaceListCheck::CInPlaceListCheck(CWnd* pParent, CRect& rect, DWORD dwStyle, 
     if (nMaxLength > rect.Width())
 	    rect.right = rect.left + nMaxLength;
 	// Resize the edit window and the drop down window
+
+	CRect rcparent;
+	pParent->GetWindowRect(rcparent);
+	ScreenToClient(rcparent);
+
+	CRect rcthis;
+	GetWindowRect(rcthis);
+	ScreenToClient(rcthis);
+	if(rcthis.bottom > rcparent.bottom)
+		rect.bottom -=rcthis.bottom - rcparent.bottom;
 	MoveWindow(rect);
+//::SetWindowPos( pParent->m_hWnd,HWND_TOP, rect.left, rect.top, 
+//		rect.Width(),rect.Height(), 
+//		SWP_SHOWWINDOW|SWP_NOACTIVATE|SWP_DRAWFRAME );
+	ShowWindow(SW_SHOW);
+
     
 
 
