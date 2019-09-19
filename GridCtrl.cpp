@@ -2821,10 +2821,58 @@ void CGridCtrl::OnEditPaste()
         ASSERT(pCell);
         if (!pCell) return;
 
-		CWnd* pEditWnd = pCell->GetEditWnd();
+		CEdit* pEditWnd = (CEdit*)pCell->GetEditWnd();
 		if ( pEditWnd && pEditWnd->IsKindOf(RUNTIME_CLASS(CEdit)) )
 		{
+//sery code
+			CString PasteText;
+			COleDataObject  obj;
+			if (obj.AttachClipboard())
+			{
+				
+				if (obj.IsDataAvailable(CF_TEXT))
+				{
+
+					// Get the text from the COleDataObject
+					HGLOBAL hmem = obj.GetGlobalData(CF_TEXT);
+					CMemFile sf((BYTE*) ::GlobalLock(hmem), (UINT)::GlobalSize(hmem));
+
+					// CF_TEXT is ANSI text, so we need to allocate a char* buffer
+					// to hold this.
+					LPSTR szBuffer = new char[::GlobalSize(hmem)]; // FIX: Use LPSTR char here
+					if (szBuffer)
+					{
+						sf.Read(szBuffer, (UINT)::GlobalSize(hmem));
+					}
+					::GlobalUnlock(hmem);
+
+				// Now store in generic TCHAR form so we no longer have to deal with
+				// ANSI/UNICODE problems
+				PasteText = szBuffer;
+				}
+			}
+			CRect rk;
+			pEditWnd->GetWindowRect(rk);
+			ScreenToClient(rk);
+			int hhPl = rk.Height();
+			int www = rk.Width()*2;
+
+
+			CSize cx = pCell->GetTextExtent(PasteText,NULL,www);
+			
+			if(rk.Height() < cx.cy)
+			{
+				hhPl = cx.cy;
+				pEditWnd->MoveWindow(rk.left,rk.top,www,hhPl,1);
+				SetRowHeight(cell.row,hhPl);
+				RedrawRow(cell.row);
+			}
+			
+//sery code
+
+
 			((CEdit*)pEditWnd)->Paste();
+
 			return;
 		}
     }
