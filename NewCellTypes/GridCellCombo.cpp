@@ -756,33 +756,51 @@ BOOL CGridCellCombo::Draw(CDC* pDC, int nRow, int nCol, CRect rect,  BOOL bErase
 #else
     // Cell selected?
     //if ( !IsFixed() && IsFocused())
+
+	CRect r1 = rect;
+	CSize scup(0,0);
+	CString sc = GetCuptionText();
+	if(sc != "")
+	{
+		scup = GetTextExtent(sc,pDC,1000);
+		r1.top +=scup.cy;
+		r1.top-=6;
+	}
+
+
+
     if (GetGrid()->IsCellEditable(nRow, nCol) && !IsEditing())
     {
         // Get the size of the scroll box
         CSize sizeScroll(GetSystemMetrics(SM_CXVSCROLL), GetSystemMetrics(SM_CYHSCROLL));
 
         // enough room to draw?
-        if (sizeScroll.cy < rect.Width() && sizeScroll.cy < rect.Height())
+        if (sizeScroll.cy < r1.Width() && sizeScroll.cy < r1.Height())
         {
             // Draw control at RHS of cell
-            CRect ScrollRect = rect;
-            ScrollRect.left   = rect.right - sizeScroll.cx;
-            ScrollRect.bottom = rect.top + sizeScroll.cy;
+            CRect ScrollRect = r1;
+            ScrollRect.left   = r1.right - sizeScroll.cx;
+            ScrollRect.bottom = r1.top + sizeScroll.cy;
 
             // Do the draw 
             pDC->DrawFrameControl(ScrollRect, DFC_SCROLL, DFCS_SCROLLDOWN);
 
             // Adjust the remaining space in the cell
             rect.right = ScrollRect.left;
+//			rect.top =  ScrollRect.top;
         }
     }
 
     CString strTempText = GetText();
+
+
+
     if (IsEditing())
         SetText(_T(""));
 
     // drop through and complete the cell drawing using the base class' method
-    BOOL bResult = CGridCell::Draw(pDC, nRow, nCol, rect,  bEraseBkgnd);
+    BOOL bResult = TRUE;
+	bResult =CGridCell::Draw(pDC, nRow, nCol, rect,  bEraseBkgnd);
 
     if (IsEditing())
         SetText(strTempText);

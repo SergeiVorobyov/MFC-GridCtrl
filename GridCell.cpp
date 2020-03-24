@@ -51,6 +51,7 @@ IMPLEMENT_DYNCREATE(CGridDefaultCell, CGridCell)
 
 CGridCell::CGridCell()
 {
+	m_strTextCuption = "";
     m_plfFont = NULL;
 	CGridCell::Reset();
 }

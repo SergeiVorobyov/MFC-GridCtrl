@@ -406,7 +406,31 @@ BOOL CGridCellBase::Draw(CDC* pDC, int nRow, int nCol, CRect rect,  BOOL bEraseB
     rect.right++;    
     rect.bottom++;
 
-    DrawText(pDC->m_hDC, GetText(), -1, rect, GetFormat() | DT_NOPREFIX);
+	CRect r1 = rect;
+	CString sc = GetCuptionText();
+	if(sc != "")
+	{
+		CSize scup = GetTextExtent(sc,pDC,1000);
+		r1.bottom = r1.top + scup.cy;
+		r1.left-=3;
+		r1.right+=3;
+		r1.top-=3;
+		r1.bottom -=6;
+
+		SetBkMode( pDC->m_hDC, TRANSPARENT);
+		CBrush brush(::GetSysColor(COLOR_MENUBAR));
+        pDC->FillRect(r1, &brush);
+
+		COLORREF ct = SetTextColor(pDC->m_hDC,::GetSysColor(COLOR_BACKGROUND));
+		DrawText(pDC->m_hDC, sc, -1, r1, DT_CENTER|DT_VCENTER | DT_NOPREFIX);
+		SetTextColor(pDC->m_hDC,ct);
+
+		r1 = rect;
+		r1.top +=scup.cy;
+		r1.top-=6;
+	}
+	CString s = GetText();
+    DrawText(pDC->m_hDC, GetText(), -1, r1, GetFormat() | DT_NOPREFIX);
 
     pDC->RestoreDC(nSavedDC);
 

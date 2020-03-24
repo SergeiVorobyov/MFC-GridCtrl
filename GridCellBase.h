@@ -101,6 +101,8 @@ public:
     virtual void SetGrid(CGridCtrl* /* pGrid */)            = 0 ;
     virtual void SetCoords( int /* nRow */, int /* nCol */) = 0 ;
 
+
+    virtual LPCTSTR    GetCuptionText()       const                = 0 ;
     virtual LPCTSTR    GetText()       const                = 0 ;
     virtual LPCTSTR    GetTipText()    const                { return GetText(); } // may override TitleTip return
     virtual int        GetImage()      const                = 0 ;

@@ -52,6 +52,7 @@ public:
 
     virtual void  SetText(LPCTSTR szText)        { m_strText = szText;  }                       
 	virtual void  SetTextTip(LPCTSTR szText)        { m_strTextTip = szText;  }           //sery            
+	virtual void  SetTextCuption(LPCTSTR szText)        { m_strTextCuption = szText;  }           //sery            
     virtual void  SetImage(int nImage)           { m_nImage = nImage;   }                        
     virtual void  SetData(LPARAM lParam)         { m_lParam = lParam;   }      
     virtual void  SetGrid(CGridCtrl* pGrid)      { m_pGrid = pGrid;     }                          
@@ -69,6 +70,7 @@ public:
     virtual LPCTSTR     GetText() const             { return (m_strText.IsEmpty())? _T("") : LPCTSTR(m_strText); }
 	//sery
 	virtual LPCTSTR     GetTipText() const             { return (m_strTextTip.IsEmpty())? GetText() : LPCTSTR(m_strTextTip); }
+	virtual LPCTSTR     GetCuptionText() const             { return (m_strTextCuption.IsEmpty())? _T("") : LPCTSTR(m_strTextCuption); }
     virtual int         GetImage() const            { return m_nImage;  }
     virtual LPARAM      GetData() const             { return m_lParam;  }
     virtual CGridCtrl*  GetGrid() const             { return m_pGrid;   }
@@ -95,6 +97,7 @@ protected:
 protected:
     CString    m_strText;      // Cell text (or binary data if you wish...)
 	CString    m_strTextTip;      // Cell text (or binary data if you wish...)  //sery
+	CString    m_strTextCuption;      // Cell text (or binary data if you wish...)  //sery
     LPARAM     m_lParam;       // 32-bit value to associate with item
     int        m_nImage;       // Index of the list view item’s icon
     DWORD      m_nFormat;

@@ -6132,21 +6132,31 @@ void CGridCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
         if (IsValid(cell))
             pCell = GetCell(cell.row, cell.col);
 
+
         // Clicked in the text area? Only then will cell selection work
+		BOOL flagCaption = FALSE;
         BOOL bInTextArea = FALSE;
         if (pCell)
         {
             CRect rectCell;
             if (GetCellRect(cell.row, cell.col, rectCell) && pCell->GetTextRect(rectCell))
                 bInTextArea = rectCell.PtInRect(point);
+			CString sc = pCell->GetCuptionText();
+			if(sc != "")
+			{
+				CSize sz = pCell->GetTextExtent(sc,0,1000);
+				if(pointClickedRel.y <= sz.cy) 
+					flagCaption = TRUE;
+			}
+
         }
 
-        if (cell.row >= m_nFixedRows && IsValid(m_LeftClickDownCell) && 
+        if (!flagCaption && cell.row >= m_nFixedRows && IsValid(m_LeftClickDownCell) && 
             cell.col >= m_nFixedCols && bInTextArea)
         {
             OnEditCell(cell.row, cell.col, pointClickedRel, VK_LBUTTON);
         }
-        else if (m_bListMode)
+        else if (!flagCaption && m_bListMode)
         {
             if (!IsValid(cell))
                 return;
@@ -6232,12 +6242,22 @@ void CGridCtrl::OnLButtonDown(UINT nFlags, CPoint point)
     BOOL bInTextArea = FALSE;
     if (pCell)
     {
+
         CRect rectCell;
         if (GetCellRect(m_LeftClickDownCell.row, m_LeftClickDownCell.col, rectCell) &&
             pCell->GetTextRect(rectCell))
         {
+			CString sc = pCell->GetCuptionText();
+			if(sc != "")
+			{
+				CSize sz = pCell->GetTextExtent(sc,0,1000);
+				rectCell.top+=sz.cy;
+			}
             bInTextArea = rectCell.PtInRect(point);
         }
+
+
+
     }
 
     // If the user clicks on the current cell, then prepare to edit it.
