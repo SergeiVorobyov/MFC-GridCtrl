@@ -828,6 +828,8 @@ private:
 	bool m_QuitFocusOnTab;
 	bool m_AllowSelectRowInFixedCol;
 
+public:
+        virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
 // Returns the default cell implementation for the given grid region

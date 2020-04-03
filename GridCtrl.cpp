@@ -7783,3 +7783,19 @@ void CGridCtrl::Reorder(int From, int To)
 	m_arRowOrder.insert(m_arRowOrder.begin()+To+Offset, Value);
 
 }
+
+BOOL CGridCtrl::PreTranslateMessage(MSG* pMsg)
+{
+    if(pMsg->message == WM_PASTE)
+	{
+        OnEditPaste();
+		return TRUE;
+	}
+    if (pMsg->message == WM_COPY)
+    {
+        OnEditCopy();
+        return TRUE;
+    }
+
+    return CWnd::PreTranslateMessage(pMsg);
+}
