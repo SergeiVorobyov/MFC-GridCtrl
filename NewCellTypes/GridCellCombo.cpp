@@ -487,7 +487,13 @@ void CInPlaceList::OnSelchange()   //sery
 				pOwner->SendMessage(WM_NOTIFY, GetDlgCtrlID(), (LPARAM)&dispinfo );
 
 		}
-		GetParent()->SetFocus(); 
+		CWnd* pOwner = GetOwner();
+		if (IsWindow(pOwner->GetSafeHwnd()))
+		{
+			CWnd *pPar = GetParent();
+			if (pPar && IsWindow(pPar->m_hWnd))
+				GetParent()->SetFocus();
+		}
 
 
 	}
