@@ -5943,8 +5943,7 @@ void CGridCtrl::OnMouseMove(UINT /*nFlags*/, CPoint point)
 //						CSize sz = GetTextExtent(idCurrentCell.row, idCurrentCell.col,pCell->GetTipText());
 //						CellRect.right = CellRect.left + sz.cx;
 //						CellRect.bottom = CellRect.top + sz.cy;
-						m_TitleTip.Show(TextRect, pCell->GetTipText(),  0, CellRect,
-                                        pCell->GetFont(),  GetTitleTipTextClr(), GetTitleTipBackClr());
+						m_TitleTip.Show(TextRect, pCell->GetTipText(),  0, CellRect, pCell->GetFont(),  GetTitleTipTextClr(), GetTitleTipBackClr());
                     }
                 }
             }
