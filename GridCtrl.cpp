@@ -1358,7 +1358,7 @@ void CGridCtrl::OnEndInPlaceEdit(NMHDR* pNMHDR, LRESULT* pResult)
     case VK_END:
         OnKeyDown((UINT)pgvItem->lParam, 0, 0);
 //        OnEditCell(m_idCurrentCell.row, m_idCurrentCell.col, CPoint( -1, -1), (UINT)pgvItem->lParam); //sery
-		break;	//sery ������� ���� �� RETURN ������ ����� ����
+		break;	//sery сделано чтов по RETURN уходил фокус вниз
 	case VK_RETURN:
 		OnKeyDown((UINT)VK_DOWN, 0, 0);
 		break;
@@ -2223,9 +2223,9 @@ void CGridCtrl::SelectColumns(CCellID currentCell,
                          bForceRedraw, bSelectCells);
     else
         SetSelectedRange(GetFixedRowCount(),
-                         min(m_SelectionStartCell.col, currentCell.col),
+            min(m_SelectionStartCell.col, currentCell.col),
                          GetRowCount()-1,
-                         max(m_SelectionStartCell.col, currentCell.col),
+            max(m_SelectionStartCell.col, currentCell.col),
                          bForceRedraw, bSelectCells);
 }
 
@@ -2273,7 +2273,7 @@ void CGridCtrl::SelectCells(CCellID currentCell,
     //else if (currentCell == m_idCurrentCell) return;
 
     SetSelectedRange(min(m_SelectionStartCell.row, row),
-                     min(m_SelectionStartCell.col, col),
+        min(m_SelectionStartCell.col, col),
                      __max(m_SelectionStartCell.row, row),
                      __max(m_SelectionStartCell.col, col),
                      bForceRedraw, bSelectCells);
@@ -3170,8 +3170,8 @@ CCellRange CGridCtrl::GetSelectedCellRange() const
         CCellID cell;
         m_SelectedCellMap.GetNextAssoc(pos, key, (CCellID&)cell);
 
-        Selection.SetMinRow( min(Selection.GetMinRow(), cell.row) );
-        Selection.SetMinCol( min(Selection.GetMinCol(), cell.col) );
+        Selection.SetMinRow(min(Selection.GetMinRow(), cell.row) );
+        Selection.SetMinCol(min(Selection.GetMinCol(), cell.col) );
         Selection.SetMaxRow( __max(Selection.GetMaxRow(), cell.row) );
         Selection.SetMaxCol( __max(Selection.GetMaxCol(), cell.col) );
     }

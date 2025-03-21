@@ -569,7 +569,7 @@ protected:
 
     BOOL MouseOverRowResizeArea(CPoint& point);
     BOOL MouseOverColumnResizeArea(CPoint& point);
-public:		//sery ��������� � public
+public:		//sery переделал в public
     CCellID GetTopleftNonFixedCell(BOOL bForceRecalculation = FALSE);
     void EnableScrollBars(int nBar, BOOL bEnable = TRUE);
     void ResetScrollBars();

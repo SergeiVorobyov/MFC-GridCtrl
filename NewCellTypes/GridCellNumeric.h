@@ -13,14 +13,13 @@
 
 #include "../GridCtrl_src/GridCell.h"
 
-class CGridCellNumeric : public CGridCell  
+class CGridCellNumeric : public CGridCell
 {
     DECLARE_DYNCREATE(CGridCellNumeric)
 
 public:
     virtual BOOL Edit(int nRow, int nCol, CRect rect, CPoint point, UINT nID, UINT nChar);
     virtual void EndEdit();
-
 };
 
 #endif // !defined(AFX_GRIDINTEGERCELL_H__3479ED0D_B57D_4940_B83D_9E2296ED75B5__INCLUDED_)

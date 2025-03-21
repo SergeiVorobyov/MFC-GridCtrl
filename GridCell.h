@@ -96,7 +96,7 @@ protected:
     CString    m_strText;      // Cell text (or binary data if you wish...)
 	CString    m_strTextTip;      // Cell text (or binary data if you wish...)  //sery
     LPARAM     m_lParam;       // 32-bit value to associate with item
-    int        m_nImage;       // Index of the list view item�s icon
+    int        m_nImage;       // Index of the list view item’s icon
     DWORD      m_nFormat;
     COLORREF   m_crFgClr;
     COLORREF   m_crBkClr;

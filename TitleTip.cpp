@@ -191,7 +191,7 @@ void CTitleTip::Show(CRect rectTitle, LPCTSTR lpszTitleText, int xoffset /*=0*/,
 	rectDisplay.right = rectDisplay.left + size.cx + xoffset;
     
     // Do not display if the text fits within available space
-	if (rectDisplay.right > rectTitle.right-xoffset)  //--sery �����
+	if (rectDisplay.right > rectTitle.right-xoffset)  //--sery далее
 //    if ( (rectDisplay.right > rectTitle.right-xoffset  && rectDisplay.Height() < m_rectHover.Height()-2) || lpHoverRect==NULL)
     {
 		// Show the titletip

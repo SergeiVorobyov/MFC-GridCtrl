@@ -212,7 +212,7 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
 	// Add the strings
 	int iSel = -1;
 	int iFirstSel = -1;
-	CString s=" ",ss;
+	CString s= _T(" "),ss;
 	s.SetAt(0,nFirstChar);
 	s.MakeUpper();
 	s.Trim();
@@ -306,7 +306,7 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
 				if(nFirstChar >= '!' )
 				{
 //					MessageBeep(-1);
-//					MessageBox("Неверный символ","",0);
+//					MessageBox("РќРµРІРµСЂРЅС‹Р№ СЃРёРјРІРѕР»","",0);
 
 				}
 			}
@@ -316,7 +316,7 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
     }
     else
 	{
-		//sery добавил позиционирование по первому символу
+		//sery РґРѕР±Р°РІРёР» РїРѕР·РёС†РёРѕРЅРёСЂРѕРІР°РЅРёРµ РїРѕ РїРµСЂРІРѕРјСѓ СЃРёРјРІРѕР»Сѓ
 		if(iSel != -1)
 		{
 			SetCurSel(iSel);
@@ -334,7 +334,7 @@ CInPlaceList::CInPlaceList(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
 				if(nFirstChar >= '!' )
 				{
 					MessageBeep(-1);
-					MessageBox("Неверный символ","",0);
+					MessageBox(_T("РќРµРІРµСЂРЅС‹Р№ СЃРёРјРІРѕР»"), _T(""),0);
 
 				}
 			}
@@ -700,7 +700,7 @@ CSize CGridCellCombo::GetCellExtent(CDC* pDC)
     CSize sizeScroll (GetSystemMetrics(SM_CXVSCROLL), GetSystemMetrics(SM_CYHSCROLL));    
     CSize sizeCell (CGridCell::GetCellExtent(pDC));    
     sizeCell.cx += sizeScroll.cx;    
-    sizeCell.cy = max(sizeCell.cy,sizeScroll.cy);    
+    sizeCell.cy = max(sizeCell.cy,sizeScroll.cy);
     return sizeCell;
 }
 
