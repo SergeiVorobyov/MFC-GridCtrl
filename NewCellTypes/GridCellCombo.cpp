@@ -35,8 +35,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "../GridCtrl_src/GridCell.h"
-#include "../GridCtrl_src/GridCtrl.h"
+#include "..\GridCell.h"
+#include "..\GridCtrl.h"
 
 #include "GridCellCombo.h"
 

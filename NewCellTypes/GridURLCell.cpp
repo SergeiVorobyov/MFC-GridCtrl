@@ -4,7 +4,7 @@
 
 #include "stdafx.h"
 #include "GridURLCell.h"
-#include "../GridCtrl_src/GridCtrl.h"
+#include "..\GridCtrl.h"
 
 IMPLEMENT_DYNCREATE(CGridURLCell, CGridCell)
 

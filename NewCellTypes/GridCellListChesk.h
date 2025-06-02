@@ -1,4 +1,5 @@
-#include "../GridCtrl_src/GridCell.h"
+#pragma once
+#include "..\GridCell.h"
 
 class CGridCellListChesk : public CGridCell
 {

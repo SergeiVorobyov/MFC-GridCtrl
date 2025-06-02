@@ -14,8 +14,8 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "../GridCtrl_src/GridCtrl.h"
-#include "../GridCtrl_src/GridCell.h"
+#include "..\GridCtrl.h"
+#include "..\GridCell.h"
 #include "GridCellDateTime.h"
 
 #ifdef _DEBUG

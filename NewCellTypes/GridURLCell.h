@@ -9,7 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "../GridCtrl_src/GridCell.h"
+#include "..\GridCell.h"
 
 typedef struct {
     LPCTSTR szURLPrefix;

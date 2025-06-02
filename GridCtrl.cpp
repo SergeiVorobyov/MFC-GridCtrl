@@ -2767,9 +2767,9 @@ void CGridCtrl::OnEditCut()
 void CGridCtrl::OnEditCopy()
 {
 //sery code
-	int kb = MyGetKeyboardLayout();
-	if (kb != 1)
-		ChangeKeyboardLayout(1);
+//	int kb = MyGetKeyboardLayout();
+//	if (kb != 1)
+//		ChangeKeyboardLayout(1);
 
     COleDataSource* pSource = CopyTextFromGrid();
     if (!pSource)
@@ -2778,8 +2778,7 @@ void CGridCtrl::OnEditCopy()
     pSource->SetClipboard();
 
 //sery code
-	ChangeKeyboardLayout(kb);
-
+//	ChangeKeyboardLayout(kb);
 }
 
 void CGridCtrl::OnEditPaste()

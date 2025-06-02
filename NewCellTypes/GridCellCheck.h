@@ -30,7 +30,7 @@
 //////////////////////////////////////////////////////////////////////
 
 
-#include "../GridCtrl_src/GridCell.h"
+#include "..\GridCell.h"
 
 
 class CGridCellCheck : public CGridCell

@@ -14,7 +14,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "../GridCtrl_src/GridCell.h"
+#include "..\GridCell.h"
 #include "afxdtctl.h"	// for CDateTimeCtrl
 
 class CGridCellDateTime : public CGridCell  

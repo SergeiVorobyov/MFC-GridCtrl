@@ -6,8 +6,8 @@
 
 #include "stdafx.h"
 #include "GridCellNumeric.h"
-#include "../GridCtrl_src/inplaceedit.h"
-#include "../GridCtrl_src/GridCtrl.h"
+#include "..\inplaceedit.h"
+#include "..\GridCtrl.h"
 
 IMPLEMENT_DYNCREATE(CGridCellNumeric, CGridCell)
 

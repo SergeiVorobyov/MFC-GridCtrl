@@ -141,7 +141,7 @@ public:
     virtual BOOL GetTextRect( LPRECT pRect);    // i/o:  i=dims of cell rect; o=dims of text rect
     virtual BOOL GetTipTextRect( LPRECT pRect) { return GetTextRect( pRect); }  // may override for btns, etc.
     virtual CSize GetTextExtent(LPCTSTR str, CDC* pDC = NULL,int ColWidth=0);
-    virtual CSize GetCellExtent(CDC* pDC);
+    virtual CSize GetCellExtent(CDC* pDC, int ColWidth=0);
 
     // Editing
     virtual BOOL Edit( int /* nRow */, int /* nCol */, CRect /* rect */, CPoint /* point */, 
