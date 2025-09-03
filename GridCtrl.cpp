@@ -5100,7 +5100,7 @@ BOOL CGridCtrl::AutoSizeColumn(int nCol, UINT nAutoSizeStyle /*=GVS_DEFAULT*/,
 
     int nWidth = 0;
 
-    ASSERT(GVS_DEFAULT <= nAutoSizeStyle && nAutoSizeStyle <= GVS_BOTH);
+    ASSERT(nAutoSizeStyle <= GVS_BOTH);
     if (nAutoSizeStyle == GVS_DEFAULT)
         nAutoSizeStyle = GetAutoSizeStyle();
 
@@ -5208,7 +5208,7 @@ void CGridCtrl::AutoSize(UINT nAutoSizeStyle /*=GVS_DEFAULT*/)
 
     int nCol, nRow;
 
-    ASSERT(GVS_DEFAULT <= nAutoSizeStyle && nAutoSizeStyle <= GVS_BOTH);
+    ASSERT(nAutoSizeStyle <= GVS_BOTH);
     if (nAutoSizeStyle == GVS_DEFAULT)
         nAutoSizeStyle = GetAutoSizeStyle();
 
