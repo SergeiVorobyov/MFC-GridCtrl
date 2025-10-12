@@ -406,30 +406,31 @@ BOOL CGridCellBase::Draw(CDC* pDC, int nRow, int nCol, CRect rect,  BOOL bEraseB
     rect.right++;    
     rect.bottom++;
 
-	CRect r1 = rect;
-	CString sc = GetCuptionText();
-	if(sc != "")
-	{
-		CSize scup = GetTextExtent(sc,pDC,1000);
-		r1.bottom = r1.top + scup.cy;
-		r1.left-=3;
-		r1.right+=3;
-		r1.top-=3;
-		r1.bottom -=6;
+    // sery
+    CRect r1 = rect;
+    CString sc = GetCuptionText();
+    if (sc != "")
+    {
+        CSize scup = GetTextExtent(sc, pDC, 1000);
+        r1.bottom = r1.top + scup.cy;
+        r1.left -= 3;
+        r1.right += 3;
+        r1.top -= 3;
+        r1.bottom -= 6;
 
-		SetBkMode( pDC->m_hDC, TRANSPARENT);
-		CBrush brush(::GetSysColor(COLOR_MENUBAR));
+        SetBkMode(pDC->m_hDC, TRANSPARENT);
+        CBrush brush(::GetSysColor(COLOR_MENUBAR));
         pDC->FillRect(r1, &brush);
 
-		COLORREF ct = SetTextColor(pDC->m_hDC,::GetSysColor(COLOR_BACKGROUND));
-		DrawText(pDC->m_hDC, sc, -1, r1, DT_CENTER|DT_VCENTER | DT_NOPREFIX);
-		SetTextColor(pDC->m_hDC,ct);
+        COLORREF ct = SetTextColor(pDC->m_hDC, ::GetSysColor(COLOR_BACKGROUND));
+        DrawText(pDC->m_hDC, sc, -1, r1, DT_CENTER | DT_VCENTER | DT_NOPREFIX);
+        SetTextColor(pDC->m_hDC, ct);
 
-		r1 = rect;
-		r1.top +=scup.cy;
-		r1.top-=6;
-	}
-	CString s = GetText();
+        r1 = rect;
+        r1.top += scup.cy;
+        r1.top -= 6;
+    }
+    CString s = GetText();
     DrawText(pDC->m_hDC, GetText(), -1, r1, GetFormat() | DT_NOPREFIX);
 
     pDC->RestoreDC(nSavedDC);
@@ -556,6 +557,11 @@ CSize CGridCellBase::GetTextExtent(LPCTSTR szText, CDC* pDC /*= NULL*/,int ColWi
     CSize size;
     int nFormat = GetFormat();
 
+    // sery
+    // TODO: Not need to force set DT_WORDBREAK here. It should be done in a client's code
+    // to keep the code universal.
+    nFormat = nFormat | DT_WORDBREAK;
+
     // If the cell is a multiline cell, then use the width of the cell
     // to get the height
     if ((nFormat & DT_WORDBREAK) && !(nFormat & DT_SINGLELINE))
@@ -578,7 +584,7 @@ CSize CGridCellBase::GetTextExtent(LPCTSTR szText, CDC* pDC /*= NULL*/,int ColWi
         }
         
         CRect rect;
-        rect.SetRect(0,0, nMaxWidth+1, 0);
+        rect.SetRect(0, 0, nMaxWidth - 2 * GetMargin(), 0);
         pDC->DrawText(szText, -1, rect, nFormat | DT_CALCRECT);
         size = rect.Size();
     }

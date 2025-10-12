@@ -696,7 +696,6 @@ protected:
     BOOL        m_bAllowRowResize, m_bAllowColumnResize;
     int         m_nRowsPerWheelNotch;
     CMap<DWORD,DWORD, CCellID, CCellID&> m_SelectedCellMap, m_PrevSelectedCellMap;
-protected:
 
 #ifndef GRIDCONTROL_NO_TITLETIPS
     CTitleTip   m_TitleTip;             // Title tips for cells
@@ -739,7 +738,6 @@ protected:
     void SelectAllCells();
     void SelectColumns(CCellID currentCell, BOOL bForceRedraw=FALSE, BOOL bSelectCells=TRUE);
     void SelectRows(CCellID currentCell, BOOL bForceRedraw=FALSE, BOOL bSelectCells=TRUE);
-protected:
     void SelectCells(CCellID currentCell, BOOL bForceRedraw=FALSE, BOOL bSelectCells=TRUE);
     void OnSelecting(const CCellID& currentCell);
 
@@ -829,7 +827,7 @@ private:
 	bool m_AllowSelectRowInFixedCol;
 
 public:
-        virtual BOOL PreTranslateMessage(MSG* pMsg);
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
 // Returns the default cell implementation for the given grid region

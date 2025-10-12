@@ -73,9 +73,9 @@ CInPlaceEdit::CInPlaceEdit(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID,
 
     m_Rect = rect;  // For bizarre CE bug.
     
-	//sery добавлено | ES_MULTILINE | ES_WANTRETURN
-    DWORD dwEditStyle = WS_BORDER|WS_CHILD|WS_VISIBLE| ES_AUTOHSCROLL | ES_MULTILINE //| ES_WANTRETURN 
-        | dwStyle;
+    //sery РґРѕР±Р°РІР»РµРЅРѕ "| ES_MULTILINE //| ES_WANTRETURN"
+    DWORD dwEditStyle = WS_BORDER | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL | ES_MULTILINE //| ES_WANTRETURN
+                        | dwStyle;
     if (!Create(dwEditStyle, rect, pParent, nID)) return;
     
     SetFont(pParent->GetFont());
@@ -119,6 +119,7 @@ BEGIN_MESSAGE_MAP(CInPlaceEdit, CEdit)
     ON_WM_KEYDOWN()
     ON_WM_GETDLGCODE()
     ON_WM_CREATE()
+    ON_WM_PASTE()
     //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -148,6 +149,20 @@ void CInPlaceEdit::OnKillFocus(CWnd* pNewWnd)
 {
     CEdit::OnKillFocus(pNewWnd);
     EndEdit();
+}
+
+void CInPlaceEdit::OnPaste()
+{
+    if (OpenClipboard())
+    {
+        HANDLE hClipboardData = GetClipboardData(CF_TEXT);
+        char* pchData = (char*)GlobalLock(hClipboardData);
+        CString strFromClipboard;
+        strFromClipboard = pchData;
+        SetWindowText(strFromClipboard);
+        GlobalUnlock(hClipboardData);
+        CloseClipboard();
+    }
 }
 
 void CInPlaceEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)

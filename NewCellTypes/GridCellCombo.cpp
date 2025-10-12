@@ -132,7 +132,6 @@ void CComboEdit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 	GetWindowText(str);
 	if(str == "" && nChar == VK_RETURN)
 	{
-		int hh=0;
 		CWnd* pOwner = GetOwner();
 		if (pOwner)
 		{
@@ -355,15 +354,12 @@ void CInPlaceList::EndEdit()
     if (::IsWindow(m_hWnd))
         GetWindowText(str);
 
-
-//sery
-	if(m_EditTxt != "")
-		str = m_EditTxt;
-	
-//--sery
-
-
-
+    //sery
+    if (!m_EditTxt.IsEmpty())
+    {
+        str = m_EditTxt;
+    }
+    //--sery
  
     // Send Notification to parent
     GV_DISPINFO dispinfo;
@@ -487,15 +483,15 @@ void CInPlaceList::OnSelchange()   //sery
 				pOwner->SendMessage(WM_NOTIFY, GetDlgCtrlID(), (LPARAM)&dispinfo );
 
 		}
-		CWnd* pOwner = GetOwner();
-		if (IsWindow(pOwner->GetSafeHwnd()))
-		{
-			CWnd *pPar = GetParent();
-			if (pPar && IsWindow(pPar->m_hWnd))
-				GetParent()->SetFocus();
-		}
-
-
+            CWnd* pOwner = GetOwner();
+            if (IsWindow(pOwner->GetSafeHwnd()))
+            {
+                CWnd* pPar = GetParent();
+                if (pPar && IsWindow(pPar->m_hWnd))
+                {
+                    GetParent()->SetFocus();
+                }
+            }
 	}
 	else
 	{
@@ -622,42 +618,42 @@ void CInPlaceList::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 
 	if (!((GetStyle() & CBS_DROPDOWNLIST) == CBS_DROPDOWNLIST)) 
-	if ( nChar == VK_RETURN )
 	{
-		m_nLastChar = nChar;
-		int iItem = GetCurSel();
-		if(iItem != -1)
+		if ( nChar == VK_RETURN )
 		{
+			m_nLastChar = nChar;
+			int iItem = GetCurSel();
+			if(iItem != -1)
+			{
+				return;
+			}
+		        else
+            		{
+                		//sery
+                		m_edit.SetWindowText(s);
+                		m_EditTxt = s;
+                		//--sery
+            		}
 			return;
 		}
-		else
-		{
-			//sery
-//				m_edit.SetWindowText(s);
-//				m_EditTxt = s;
-
-			//--sery
-		}
-		return;
 	}
-	if ( nChar == VK_TAB )
+	if (nChar == VK_TAB)
 	{
-		m_nLastChar = nChar;
-		int iItem = GetCurSel();
-		if(iItem != -1)
-		{
-			return;
-		}
-		else
-		{
-			//sery
-				m_edit.SetWindowText(s);
-				m_EditTxt = s;
-			//--sery
-		}
-		return;
+       		m_nLastChar = nChar;
+	        int iItem = GetCurSel();
+        	if (iItem != -1)
+	        {
+        	    return;
+	        }
+        	else
+	        {
+        	    //sery
+	            m_edit.SetWindowText(s);
+        	    m_EditTxt = s;
+	            //--sery
+        	}
+	        return;
 	}
-
 	CComboBox::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
@@ -667,21 +663,23 @@ void CInPlaceList::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 	if (nChar == VK_ESCAPE) 
 		SetWindowText(m_sInitText);	// restore previous text
 
-	if (/*nChar == VK_TAB ||*/ nChar == VK_ESCAPE)  //sery
+    	if (/*nChar == VK_TAB ||*/ nChar == VK_ESCAPE) //sery
 	{
 		m_nLastChar = nChar;
 		GetParent()->SetFocus();	// This will destroy this window
 		return;
 	}
-	if ( nChar == VK_RETURN  || nChar == VK_TAB)
+	if (nChar == VK_RETURN || nChar == VK_TAB) //sery
 	{
 		CString s;
 		GetWindowText(s);
 		s.Trim();
 		if(s != "")
 		{
-			if ( nChar == VK_TAB)//sery
-				m_EditTxt = s;
+		        if (nChar == VK_TAB) //sery
+            		{
+		          	m_EditTxt = s;
+            		}
 			m_nLastChar = nChar;
 			GetParent()->SetFocus();	// This will destroy this window
 
@@ -763,17 +761,15 @@ BOOL CGridCellCombo::Draw(CDC* pDC, int nRow, int nCol, CRect rect,  BOOL bErase
     // Cell selected?
     //if ( !IsFixed() && IsFocused())
 
-	CRect r1 = rect;
-	CSize scup(0,0);
-	CString sc = GetCuptionText();
-	if(sc != "")
-	{
-		scup = GetTextExtent(sc,pDC,1000);
-		r1.top +=scup.cy;
-		r1.top-=6;
-	}
-
-
+    CRect r1 = rect;
+    CSize scup(0, 0);
+    CString sc = GetCuptionText();
+    if (!sc.IsEmpty())
+    {
+        scup = GetTextExtent(sc, pDC, 1000);
+        r1.top += scup.cy;
+        r1.top -= 6;
+    }
 
     if (GetGrid()->IsCellEditable(nRow, nCol) && !IsEditing())
     {
@@ -785,10 +781,10 @@ BOOL CGridCellCombo::Draw(CDC* pDC, int nRow, int nCol, CRect rect,  BOOL bErase
         {
             // Draw control at RHS of cell
             CRect ScrollRect = r1;
-            ScrollRect.left   = r1.right - sizeScroll.cx;
+            ScrollRect.left = r1.right - sizeScroll.cx;
             ScrollRect.bottom = r1.top + sizeScroll.cy;
 
-            // Do the draw 
+            // Do the draw
             pDC->DrawFrameControl(ScrollRect, DFC_SCROLL, DFCS_SCROLLDOWN);
 
             // Adjust the remaining space in the cell
@@ -796,11 +792,7 @@ BOOL CGridCellCombo::Draw(CDC* pDC, int nRow, int nCol, CRect rect,  BOOL bErase
 //			rect.top =  ScrollRect.top;
         }
     }
-
     CString strTempText = GetText();
-
-
-
     if (IsEditing())
         SetText(_T(""));
 

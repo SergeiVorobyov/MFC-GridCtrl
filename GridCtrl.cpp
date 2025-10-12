@@ -2473,13 +2473,10 @@ BOOL CGridCtrl::PasteTextToGrid(CCellID cell, COleDataObject* pDataObject,
     CString strLine = strText;
     int nLine = 0;
 
-
-//�� ������� ������� ������� ����������� ������������� ������� 
-//�������� (
-//	ValidateAndModifyCellContents(cell.row, cell.col, strLine);	
-//	SetItemState(cell.row, cell.col,
-//	GetItemState(cell.row, cell.col) & ~GVIS_SELECTED);
-
+    // sery возможность многострочной вставки (отменили)
+    // ValidateAndModifyCellContents(cell.row, cell.col, strLine);
+    // SetItemState(cell.row, cell.col,
+    // GetItemState(cell.row, cell.col) & ~GVIS_SELECTED);
 
     // Find the end of the first line
 	CCellRange PasteRange(cell.row, cell.col,-1,-1);
@@ -2821,58 +2818,52 @@ void CGridCtrl::OnEditPaste()
         ASSERT(pCell);
         if (!pCell) return;
 
-		CEdit* pEditWnd = (CEdit*)pCell->GetEditWnd();
+		CWnd* pEditWnd = pCell->GetEditWnd();
 		if ( pEditWnd && pEditWnd->IsKindOf(RUNTIME_CLASS(CEdit)) )
 		{
-//sery code
-			CString PasteText;
-			COleDataObject  obj;
-			if (obj.AttachClipboard())
-			{
-				
-				if (obj.IsDataAvailable(CF_TEXT))
-				{
+            //sery code
+            CString PasteText;
+            COleDataObject obj;
+            if (obj.AttachClipboard())
+            {
+                if (obj.IsDataAvailable(CF_TEXT))
+                {
+                    // Get the text from the COleDataObject
+                    HGLOBAL hmem = obj.GetGlobalData(CF_TEXT);
+                    CMemFile sf((BYTE*)::GlobalLock(hmem), (UINT)::GlobalSize(hmem));
 
-					// Get the text from the COleDataObject
-					HGLOBAL hmem = obj.GetGlobalData(CF_TEXT);
-					CMemFile sf((BYTE*) ::GlobalLock(hmem), (UINT)::GlobalSize(hmem));
+                    // CF_TEXT is ANSI text, so we need to allocate a char* buffer
+                    // to hold this.
+                    LPSTR szBuffer = new char[::GlobalSize(hmem)]; // FIX: Use LPSTR char here
+                    if (szBuffer)
+                    {
+                        sf.Read(szBuffer, (UINT)::GlobalSize(hmem));
+                    }
+                    ::GlobalUnlock(hmem);
 
-					// CF_TEXT is ANSI text, so we need to allocate a char* buffer
-					// to hold this.
-					LPSTR szBuffer = new char[::GlobalSize(hmem)]; // FIX: Use LPSTR char here
-					if (szBuffer)
-					{
-						sf.Read(szBuffer, (UINT)::GlobalSize(hmem));
-					}
-					::GlobalUnlock(hmem);
+                    // Now store in generic TCHAR form so we no longer have to deal with
+                    // ANSI/UNICODE problems
+                    PasteText = szBuffer;
+                }
+            }
+            CRect rk;
+            pEditWnd->GetWindowRect(rk);
+            ScreenToClient(rk);
+            int hhPl = rk.Height();
+            int www = rk.Width() * 2;
 
-				// Now store in generic TCHAR form so we no longer have to deal with
-				// ANSI/UNICODE problems
-				PasteText = szBuffer;
-				}
-			}
-			CRect rk;
-			pEditWnd->GetWindowRect(rk);
-			ScreenToClient(rk);
-			int hhPl = rk.Height();
-			int www = rk.Width()*2;
+            CSize cx = pCell->GetTextExtent(PasteText, NULL, www);
 
-
-			CSize cx = pCell->GetTextExtent(PasteText,NULL,www);
-			
-			if(rk.Height() < cx.cy)
-			{
-				hhPl = cx.cy;
-				pEditWnd->MoveWindow(rk.left,rk.top,www,hhPl,1);
-				SetRowHeight(cell.row,hhPl);
-				RedrawRow(cell.row);
-			}
-			
-//sery code
-
+            if (rk.Height() < cx.cy)
+            {
+                hhPl = cx.cy;
+                pEditWnd->MoveWindow(rk.left, rk.top, www, hhPl, 1);
+                SetRowHeight(cell.row, hhPl);
+                RedrawRow(cell.row);
+            }
+            //sery code
 
 			((CEdit*)pEditWnd)->Paste();
-
 			return;
 		}
     }
@@ -4689,7 +4680,7 @@ BOOL CGridCtrl::GetItem(GV_ITEM* pItem)
     if (pItem->mask & GVIF_TEXT)
         pItem->strText = GetItemText(pItem->row, pItem->col);
     if (pItem->mask & GVIF_PARAM)
-        pItem->lParam  = pCell->GetData();;
+        pItem->lParam  = pCell->GetData();
     if (pItem->mask & GVIF_IMAGE)
         pItem->iImage  = pCell->GetImage();
     if (pItem->mask & GVIF_STATE)
@@ -5943,7 +5934,8 @@ void CGridCtrl::OnMouseMove(UINT /*nFlags*/, CPoint point)
 //						CSize sz = GetTextExtent(idCurrentCell.row, idCurrentCell.col,pCell->GetTipText());
 //						CellRect.right = CellRect.left + sz.cx;
 //						CellRect.bottom = CellRect.top + sz.cy;
-						m_TitleTip.Show(TextRect, pCell->GetTipText(),  0, CellRect, pCell->GetFont(),  GetTitleTipTextClr(), GetTitleTipBackClr());
+						m_TitleTip.Show(TextRect, pCell->GetTipText(),  0, CellRect,
+                                        pCell->GetFont(),  GetTitleTipTextClr(), GetTitleTipBackClr());
                     }
                 }
             }
@@ -6131,23 +6123,24 @@ void CGridCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
         if (IsValid(cell))
             pCell = GetCell(cell.row, cell.col);
 
-
         // Clicked in the text area? Only then will cell selection work
-		BOOL flagCaption = FALSE;
+        BOOL flagCaption = FALSE;
         BOOL bInTextArea = FALSE;
         if (pCell)
         {
             CRect rectCell;
             if (GetCellRect(cell.row, cell.col, rectCell) && pCell->GetTextRect(rectCell))
                 bInTextArea = rectCell.PtInRect(point);
-			CString sc = pCell->GetCuptionText();
-			if(sc != "")
-			{
-				CSize sz = pCell->GetTextExtent(sc,0,1000);
-				if(pointClickedRel.y <= sz.cy) 
-					flagCaption = TRUE;
-			}
 
+            CString sc = pCell->GetCuptionText();
+            if (!sc.IsEmpty())
+            {
+                CSize sz = pCell->GetTextExtent(sc, 0, 1000);
+                if (pointClickedRel.y <= sz.cy)
+                {
+                    flagCaption = TRUE;
+                }
+            }
         }
 
         if (!flagCaption && cell.row >= m_nFixedRows && IsValid(m_LeftClickDownCell) && 
@@ -6211,13 +6204,6 @@ void CGridCtrl::OnLButtonDown(UINT nFlags, CPoint point)
         return;
 	m_CurRow = m_LeftClickDownCell.row;
 
-#ifdef _DEBUG
-
-	if(m_LeftClickDownCell.col == 11)
-	{
-		int ttt=0;
-	}
-#endif
     // If the SHIFT key is not down, then the start of the selection area should be the 
     // cell just clicked. Otherwise, keep the previous selection-start-cell so the user
     // can add to their previous cell selections in an intuitive way. If no selection-
@@ -6246,17 +6232,14 @@ void CGridCtrl::OnLButtonDown(UINT nFlags, CPoint point)
         if (GetCellRect(m_LeftClickDownCell.row, m_LeftClickDownCell.col, rectCell) &&
             pCell->GetTextRect(rectCell))
         {
-			CString sc = pCell->GetCuptionText();
-			if(sc != "")
-			{
-				CSize sz = pCell->GetTextExtent(sc,0,1000);
-				rectCell.top+=sz.cy;
-			}
+            CString sc = pCell->GetCuptionText();
+            if (!sc.IsEmpty())
+            {
+                CSize sz = pCell->GetTextExtent(sc, 0, 1000);
+                rectCell.top += sz.cy;
+            }
             bInTextArea = rectCell.PtInRect(point);
         }
-
-
-
     }
 
     // If the user clicks on the current cell, then prepare to edit it.
@@ -6540,8 +6523,8 @@ void CGridCtrl::OnLButtonDown(UINT nFlags, CPoint point)
                 m_PrevSelectedCellMap.SetAt(key, cell);
             }
         }
-        
-        if (m_LeftClickDownCell.row < GetFixedRowCount())
+        //sery Added "&& m_LeftClickDownCell.row == 0" to the expression.
+        if (m_LeftClickDownCell.row < GetFixedRowCount() && m_LeftClickDownCell.row == 0)
 		{
             OnFixedRowClick(m_LeftClickDownCell);
 #ifndef GRIDCONTROL_NO_DRAGDROP
@@ -7785,11 +7768,11 @@ void CGridCtrl::Reorder(int From, int To)
 
 BOOL CGridCtrl::PreTranslateMessage(MSG* pMsg)
 {
-    if(pMsg->message == WM_PASTE)
-	{
+    if (pMsg->message == WM_PASTE)
+    {
         OnEditPaste();
-		return TRUE;
-	}
+        return TRUE;
+    }
     if (pMsg->message == WM_COPY)
     {
         OnEditCopy();

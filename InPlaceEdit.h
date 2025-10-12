@@ -50,6 +50,7 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	protected:
 	virtual void PostNcDestroy();
+        afx_msg void OnPaste();
 	//}}AFX_VIRTUAL
  
 // Implementation

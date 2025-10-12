@@ -17,7 +17,7 @@ CInPlaceListCheck::CInPlaceListCheck(CWnd* pParent, CRect& rect, DWORD dwStyle, 
     m_crForeClr = crFore;
     m_crBackClr = crBack;
 
-	m_nNumLines = Items.GetSize();;//4;
+	m_nNumLines = Items.GetSize(); //4;
 	m_sInitText = sInitText;
  	m_nRow		= nRow;
  	m_nCol      = nColumn;
@@ -62,25 +62,24 @@ CInPlaceListCheck::CInPlaceListCheck(CWnd* pParent, CRect& rect, DWORD dwStyle, 
     
     if (nMaxLength > rect.Width())
 	    rect.right = rect.left + nMaxLength;
+
 	// Resize the edit window and the drop down window
+    CRect rcparent;
+    pParent->GetWindowRect(rcparent);
+    ScreenToClient(rcparent);
 
-	CRect rcparent;
-	pParent->GetWindowRect(rcparent);
-	ScreenToClient(rcparent);
-
-	CRect rcthis;
-	GetWindowRect(rcthis);
-	ScreenToClient(rcthis);
-	if(rcthis.bottom > rcparent.bottom)
-		rect.bottom -=rcthis.bottom - rcparent.bottom;
-	MoveWindow(rect);
-//::SetWindowPos( pParent->m_hWnd,HWND_TOP, rect.left, rect.top, 
-//		rect.Width(),rect.Height(), 
-//		SWP_SHOWWINDOW|SWP_NOACTIVATE|SWP_DRAWFRAME );
-	ShowWindow(SW_SHOW);
-
-    
-
+    CRect rcthis;
+    GetWindowRect(rcthis);
+    ScreenToClient(rcthis);
+    if (rcthis.bottom > rcparent.bottom)
+    {
+        rect.bottom -= rcthis.bottom - rcparent.bottom;
+    }
+    MoveWindow(rect);
+    //::SetWindowPos( pParent->m_hWnd,HWND_TOP, rect.left, rect.top,
+    // rect.Width(),rect.Height(),
+    // SWP_SHOWWINDOW|SWP_NOACTIVATE|SWP_DRAWFRAME );
+    ShowWindow(SW_SHOW);
 
 	SetHorizontalExtent(0); // no horz scrolling
 

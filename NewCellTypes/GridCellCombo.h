@@ -166,7 +166,6 @@ private:
 	int		 m_nNumLines;
 	CString  m_sInitText;
 	CString  m_EditTxt; //sery
-
 	int		 m_nRow;
 	int		 m_nCol;
  	UINT     m_nLastChar; 

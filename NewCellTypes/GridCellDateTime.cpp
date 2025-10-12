@@ -253,13 +253,12 @@ void CInPlaceDateTime::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		return;
 	}
 
-	if (nChar == VK_TAB || nChar == VK_RETURN || nChar == VK_ESCAPE)
-	{
-		m_nLastChar = nChar;
-		GetParent()->SetFocus();    // This will destroy this window
-		return;
-	}
-
+        if (nChar == VK_TAB || nChar == VK_RETURN || nChar == VK_ESCAPE)
+        {
+            m_nLastChar = nChar;
+            GetParent()->SetFocus(); // This will destroy this window
+            return;
+        }
 
 	CDateTimeCtrl::OnKeyDown(nChar, nRepCnt, nFlags);
 }
